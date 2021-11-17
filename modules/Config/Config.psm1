@@ -51,3 +51,10 @@ function Get-Config {
 
     return Join-Object $defaultConfig $userConfig
 }
+
+# Keybinds
+Set-PSReadLineKeyHandler -Chord Ctrl+. -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('"$env:EDITOR $env:PWSH_CONFIG" | Invoke-Expression')
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+}
