@@ -7,13 +7,11 @@ Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
 }
 
 Register-ArgumentCompleter -Native -CommandName puma -ScriptBlock {
-    param($commandName, $wordToComplete, $cursorPosition)
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
 
-    puma complete $commandName | ForEach-Object {
+    $command = $parameterName.CommandElements | Join-String -Property Value -Separator " "
+
+    puma complete $command | ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
     }
-
-    # @('database', 'repo') | ForEach-Object {
-    #     [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
-    # }
 }
