@@ -8,6 +8,6 @@ Set-PSReadLineKeyHandler -Chord "Ctrl+h" -ScriptBlock {
 # Edit Config
 Set-PSReadLineKeyHandler -Chord Ctrl+. -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('"$env:EDITOR $env:PWSH_CONFIG" | Invoke-Expression') # TODO: Use $env:EDITOR
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('"$env:EDITOR $env:PWSH_CONFIG" | Invoke-Expression')
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }
