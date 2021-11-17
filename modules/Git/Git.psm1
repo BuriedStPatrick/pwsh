@@ -118,37 +118,6 @@ Function Invoke-GitDeleteBranch {
     git branch @args -d
 }
 
-Function New-PullRequest {
-    $url = Get-PullRequestUrl @args
-    Start-Process $url
-}
-
-Function Get-PullRequestUrl(
-    [string] $target = "master",
-    [string] $remote = "origin",
-    [string] $user = "eksponent") {
-    Write-Host "Creating Bitbucket Pull Request.."
-
-    $branchname = git branch --show-current
-    if (@("master","develop","release","test") -contains $branchname) {
-        Write-Host "Kan ikke lave pullrequests ud fra master, develop, test og release branches"
-        return
-    }
-
-    $url = git remote get-url $remote
-
-    if ($url.StartsWith('git@')) {
-        $remoteSource = $url.Split(':')[0].Replace('git@', '')
-    } elseif ($url.StartsWith('https://')) {
-        $remoteSource = $url # this won't work right now, but eh??
-    }
-
-    $repos = $url.split('/')[-1]
-
-    return "https://$remoteSource/$user/$repos/pull-requests/new?source=$branchname&dest=$target&t=1"
-}
-
-
 # Keybindings
 Set-PSReadLineKeyHandler -Chord Ctrl+g -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
