@@ -1,5 +1,5 @@
 function Invoke-Prompt {
-    $config = Get-Content $env:PWSH_CONFIG | ConvertFrom-Json
+    $config = Get-Config
     switch($config.prompt) {
         "starship" {
             Invoke-Expression (&starship init powershell)
