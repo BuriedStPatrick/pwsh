@@ -17,10 +17,12 @@ function Invoke-EnvironmentVariables {
     $env:EDITOR = 'nvim'
 }
 
+# Load environment variables
 Invoke-EnvironmentVariables
+
+# Load modules
+Get-ChildItem (Join-Path $env:PWSH_HOME modules\**\*.psm1) -File | ForEach-Object { Import-Module $_.FullName }
 
 # Load init scripts
 Get-ChildItem (Join-Path $env:PWSH_HOME init\*.ps1) -File | ForEach-Object { . $_.FullName }
 
-# Load modules
-Get-ChildItem (Join-Path $env:PWSH_HOME modules\**\*.psm1) -File | ForEach-Object { Import-Module $_.FullName }
