@@ -42,11 +42,11 @@ function Install-Pwsh {
 
     # Source pwshrc in profile automatically?
     $profileText = Get-Content $PROFILE -Raw -Encoding utf8
-    if (!($profileText.Contains($startBlock) -and $profileText.Contains($endBlock))) {
+    if (($null -eq $profileText) -or !($profileText.Contains($startBlock) -and $profileText.Contains($endBlock))) {
         $sourceProfile = Read-Host "Source in profile? [Y/n]"
         if (! 'n' -eq $sourceProfile.ToLower()) {
             $profileText = Get-Content $PROFILE
-    
+
             if (!($null -eq $profileText) -and $profileText.Contains($startBlock)) {
                 return
             }
