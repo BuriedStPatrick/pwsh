@@ -9,10 +9,6 @@ function Invoke-FuzzyFile {
         return
     }
 
-    if ($selection -eq "..") {
-        Set-Location ..\
-    }
-
     # If selection is file, open it
     if (Test-Path -Path $selection -PathType Leaf) {
         Invoke-Item $selection
