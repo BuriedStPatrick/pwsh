@@ -1,15 +1,6 @@
 <#
     This module contains Core functionality used by other modules and should not be disabled.
 #>
-function Test-Command($command) {
-    $ErrorActionPreference = "SilentlyContinue"
-    if (Get-Command $command) {
-        return $true
-    } else {
-        return $false
-    }
-}
-
 function Read-Boolean($prompt) {
     Write-Host "[Y/n]" -ForegroundColor Black -BackgroundColor Blue -NoNewline
     $value = (Read-Host " $prompt") 

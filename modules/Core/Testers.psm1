@@ -6,3 +6,12 @@ function Test-IsAdministrator {
 
     throw "Cannot check admin status on non-Windows OS"
 }
+
+function Test-Command($command) {
+    $ErrorActionPreference = "SilentlyContinue"
+    if (Get-Command $command) {
+        return $true
+    } else {
+        return $false
+    }
+}
