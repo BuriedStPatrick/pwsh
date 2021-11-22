@@ -15,5 +15,7 @@ function Invoke-FuzzyPasswords($listId) {
 
     $sel = $passwords | Where-Object { $_.Title -eq $selection }
 
-    return $sel.Password
+    if (!$null -eq $sel) {
+        return (Invoke-PasswordStateFetchPassword $sel.PasswordID).Password
+    }
 }

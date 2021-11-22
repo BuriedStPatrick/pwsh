@@ -1,6 +1,6 @@
 $config = (Get-Config).modules.PasswordState.config
 
-function Get-PwmPassword($Id) {
+function Invoke-PasswordStateFetchPassword($Id) {
     $passwordUrl = "$($config.baseUrl)/winapi/passwords"
 
     if (!($env:UserDomain -eq $config.domain)) {
@@ -26,7 +26,7 @@ function Get-PwmPassword($Id) {
     }
 }
 
-function Get-PasswordLists {
+function Invoke-PasswordStateFetchPasswordLists {
     $passwordListUrl = "$($config.baseUrl)/winapi/passwordlists"
 
     if (!($env:UserDomain -eq $config.domain)) {
@@ -52,7 +52,7 @@ function Get-PasswordLists {
     }
 }
 
-function Get-Passwords($listId) {
+function Invoke-PasswordStateFetchPasswords($listId) {
     $listUrl = "$($config.baseUrl)/winapi/passwords/$($listId)?QueryAll"
 
     if (!($env:UserDomain -eq $config.domain)) {
@@ -91,7 +91,7 @@ function Clear-PwmCredential {
     $global:PwmCred = $null
 }
 
-function Format-PwmFile {
+function Invoke-PasswordStateTransformFile {
     param(
         [Parameter(Mandatory = $true, Position = 1)]
         [string]
@@ -123,7 +123,7 @@ function Format-PwmFile {
                         $PasswordId = $_.groups[2]
                         $Property = $_.groups[1]
 
-                        $Password = Get-PwmPassword -PasswordId $PasswordId
+                        $Password = Invoke-PasswordStateFetchPassword -PasswordId $PasswordId
 
                         $Content = $Content.Replace($_.groups[0], $Password."$Property")
                     }
@@ -136,4 +136,7 @@ function Format-PwmFile {
     }
 }
 
-Export-ModuleMember -Function * -Alias * -Variable *
+Export-ModuleMember -Function Invoke-PasswordStateFetchPassword
+Export-ModuleMember -Function Invoke-PasswordStateFetchPasswords
+Export-ModuleMember -Function Invoke-PasswordStateFetchPasswordLists
+Export-ModuleMember -Function Invoke-PasswordStateTransformFile
