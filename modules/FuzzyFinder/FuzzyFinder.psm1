@@ -1,5 +1,7 @@
-# FuzzyFinder helper functions to quickly get around!
-
+# Invokes fzf in the current directory.
+# On selection:
+#   if the selected item is a directory, cd's into it and re-invokes itself to allow further navigation.
+#   if the selected item is a file, calls Invoke-Item on it.
 function Invoke-FuzzyFile {
     $results += @("..") + (Get-ChildItem).Name
 
@@ -19,17 +21,4 @@ function Invoke-FuzzyFile {
         Set-Location $selection
         Invoke-FuzzyFile
     }
-}
-
-# Key bindings
-Set-PSReadLineKeyHandler -Chord Ctrl+f -ScriptBlock {
-    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('Invoke-FuzzyFile')
-    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
-}
-
-Set-PSReadLineKeyHandler -Chord "Ctrl+``" -ScriptBlock {
-    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('cd ~')
-    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine() 
 }

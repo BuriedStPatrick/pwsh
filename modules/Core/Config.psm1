@@ -33,23 +33,27 @@ Function Join-Object {
 }
 
 function Get-Config {
-    $defaultConfig = (Test-Path (Join-Path $env:PWSH_HOME pwsh.json)) `
-        ? (Get-Content (Join-Path $env:PWSH_HOME pwsh.json))
+    $defaultConfigText = (Test-Path (Join-Path $env:PWSH_HOME pwsh.jsonc)) `
+        ? (Get-Content (Join-Path $env:PWSH_HOME pwsh.jsonc))
         : $null
 
-    if (!($null -eq $defaultConfig)) {
-        $defaultConfig = $defaultConfig | ConvertFrom-Json
+    if (!($null -eq $defaultConfigText)) {
+        $defaultConfig = $defaultConfigText | ConvertFrom-Json
     }
 
-    $userConfig = (Test-Path $env:PWSH_CONFIG) `
+    $userConfigText = (Test-Path $env:PWSH_CONFIG) `
         ? (Get-Content $env:PWSH_CONFIG)
         : $null
 
-    if (!($null -eq $userConfig)) {
-        $userConfig = $userConfig | ConvertFrom-Json
+    if (!($null -eq $userConfigText)) {
+        $userConfig = $userConfigText | ConvertFrom-Json
     }
 
-    return Join-Object $defaultConfig $userConfig
+    if (!($null -eq $userConfig)) {
+        return Join-Object $defaultConfig $userConfig
+    } else {
+        return $defaultConfig
+    }
 }
 
 # Keybinds
