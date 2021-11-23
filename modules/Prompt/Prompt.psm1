@@ -6,10 +6,16 @@ function Invoke-Prompt {
         }
         "custom" {
             # Load the custom prompt script
-            if (Test-Path $config.customPromptScript) {
-                . $config.customPromptScript
+            if (!$config.custom?.scriptPath) {
+                Write-ErrorMessage "Missing scriptPath for custom script. Did you add it?"
+                return
+            }
+
+            if ((Test-Path $config.custom.scriptPath)) {
+                Write-WarningMessage "Custom prompt doesn't seem to work yet for some reason. Suggest adding it manually to $PROFILE"
+                . $config.custom.scriptPath
             } else {
-                Write-ErrorMessage "Couldn't find custom prompt script at '$($config.customPromptScript)'. You sure this is right?"
+                Write-ErrorMessage "Couldn't find custom prompt script at '$($config.custom.scriptPath)'. You sure this is right?"
             }
         }
         "starship" {
@@ -21,8 +27,17 @@ function Invoke-Prompt {
         }
         "omp" {
             if (Test-Command oh-my-posh) {
-                # Invoke-Expression (&oh-my-posh init powershell)
-                Write-ErrorMessage "oh-my-posh not supported yet"
+                $themes = Get-OhMyPoshThemes
+
+                if ($config.omp?.theme) {
+                    $theme = $themes | Where-Object { $_.Name -eq "$($config.omp.theme).omp.json" } | Select-Object -First 1
+                }
+
+                if ($theme) {
+                    oh-my-posh --init --shell pwsh --config $theme.FullName | Invoke-Expression
+                } else {
+                    Write-ErrorMessage "Couldn't find oh-my-posh theme: '$($theme.Name)'"
+                }
             } else {
                 Write-ErrorMessage "Oh-My-Posh prompt not installed or not configured in PATH"
             }

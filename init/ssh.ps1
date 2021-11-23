@@ -1,3 +1,9 @@
+# TODO: Move this code into a module
+$sshConfig = (Get-Config).modules.Ssh
+if($sshConfig.disabled) {
+    return
+}
+
 # If user doesn't have ssh in PATH, write error and exit
 @('ssh', 'ssh-add', 'ssh-keygen', 'ssh-agent') | ForEach-Object {
     if (!(Test-Command $_)) {
@@ -36,8 +42,10 @@ Set-GitEnvironmentVars
 # If running in Windows, start the OpenSSH agent service if it's not already running.
 if ($IsWindows) {
     Start-OpenSshAgent
+} else {
+    Write-ErrorMessage "Ssh-agent isn't support on non-Windows OS'es yet. Still working on it!"
+    return
 }
-
 
 # For each ssh-agent connection, add the specified public key to the agent.
 $currentlyAddedSshKeys = $(ssh-add -l)?.Split(" ")?[2] ?? @()

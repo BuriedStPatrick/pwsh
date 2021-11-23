@@ -16,6 +16,8 @@
         "Ssh": {
             "disabled": false,
             "config": {
+                // If enabled, looks for private keys inside $HOME/.ssh and attempts to add them to the session
+                // Recommended if you use Git a lot with SSH unless you like typing passwords all the time
                 "loadKeysOnStarup": true
             }
         },
@@ -51,13 +53,30 @@
                 // Options:
                 // none | custom | starship | omp
                 "prompt": "starship",
-                "customPromptScript": ""
+                "custom": {
+                    // Path to the custom prompt script
+                    // TODO: POC, not active yet
+                    "scriptPath": ""
+                },
+                "starship": {
+                    // Path to the starship config TOML file
+                    // TODO: POC, not active yet
+                    "configPath": ""
+                },
+                "omp": {
+                    // Name of the theme to use
+                    // Print available themes with Write-OhMyPoshThemePreviews
+                    "theme": "marcduiker"
+                }
             }
         },
         "Vim": {
             "disabled": false,
             "config": {
+                // Sets vim (or neovim) as the default $env:EDITOR
+                // This will be moved to a generalized option in the future
                 "setDefaultEditor": true,
+                // Aliases vim so that it points to nvim instead
                 "useNeovim": true
             }
         },

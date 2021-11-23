@@ -64,9 +64,7 @@ function Install-Pwsh {
     }
 }
 
-function Install-DefaultConfig {
-    $ErrorActionPreference = 'Stop'
-    # Add default config?
+function Invoke-EnsurePwshConfigDir {
     $pwshConfigDir = $IsWindows `
         ? (Join-Path $env:LOCALAPPDATA pwsh)
         : (Join-Path $HOME .config pwsh)
@@ -75,10 +73,36 @@ function Install-DefaultConfig {
         New-Item $pwshConfigDir -Force -ItemType Directory
     }
 
-    if (!(Test-Path(Join-Path $pwshConfigDir pwsh.jsonc))) {
+    return $pwshConfigDir
+}
+
+function Install-EmptyConfig {
+    $ErrorActionPreference = 'Stop'
+    $pwshConfigDir = Invoke-EnsurePwshConfigDir
+    $pwshUserConfigPath = (Join-Path $pwshConfigDir pwsh.jsonc)
+
+    if (!(Test-Path($pwshUserConfigPath))) {
+        New-Item $pwshUserConfigPath
+        Write-OkMessage "Added empty config to $pwshConfigDir"
+    } elseif ((Read-Boolean "Config file already exists. Replace with empty file?")) {
+        New-Item $pwshUserConfigPath -Force
+        Write-OkMessage "Replaced $pwshUserConfigPath with emtpy file"
+    }
+}
+
+function Install-DefaultConfig {
+    $ErrorActionPreference = 'Stop'
+
+    $pwshConfigDir = Invoke-EnsurePwshConfigDir
+    $pwshUserConfigPath = (Join-Path $pwshConfigDir pwsh.jsonc)
+
+    if (!(Test-Path($pwshUserConfigPath))) {
         # Copy default pwsh.jsonc
         Copy-Item (Join-Path $thisDirectory pwsh.jsonc) $pwshConfigDir
-        Write-InfoMessage "Added config to $pwshConfigDir"
+        Write-OkMessage "Added config to $pwshConfigDir"
+    } elseif ((Read-Boolean "Config file already exists. Replace?")) {
+        Copy-Item (Join-Path $thisDirectory pwsh.jsonc) $pwshConfigDir -Force
+        Write-OkMessage "Replaced $pwshUserConfigPath with default config"
     }
 }
 
@@ -112,7 +136,7 @@ function Uninstall-Pwsh {
     }
 }
 
-$option = Read-Host "Pick an option`n(1) Install`n(2) Uninstall`n(3) Install default config`n"
+$option = Read-Host "Pick an option`n(1) Install`n(2) Uninstall`n(3) Install default config`n(4) Install empty config`n"
 
 switch($option) {
     "1" {
@@ -125,7 +149,9 @@ switch($option) {
     }
     "3" {
         Install-DefaultConfig
-        Write-OkMessage "Installed default config"
+    }
+    "4" {
+        Install-EmptyConfig
     }
     default {
         Write-ErrorMessage "Invalid option"
