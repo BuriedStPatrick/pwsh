@@ -91,6 +91,11 @@
                 // Example: MYDOMAIN
                 "domain": ""
             }
+        },
+        "Postgres": {
+            "disabled": false,
+            "config": {
+            }
         }
     }
 }
