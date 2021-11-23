@@ -48,7 +48,7 @@ if ($IsWindows) {
 }
 
 # For each ssh-agent connection, add the specified public key to the agent.
-$currentlyAddedSshKeys = $(ssh-add -l)?.Split(" ")?[2] ?? @()
+$currentlyAddedSshKeys = $(ssh-add -l)?.Split(" ")?[3]?.Replace("(", "").Replace(")", "").ToLower() ?? @()
 Get-ChildItem -Path $HOME/.ssh/id_* -Recurse `
-    | Where-Object { !($_.Extension -like '.pub') -and !($_.FullName -in $currentlyAddedSshKeys) } `
+    | Where-Object { !($_.Extension -like '.pub') -and !($_.Name.Replace("id_","").ToLower() -in $currentlyAddedSshKeys) } `
     | ForEach-Object { ssh-add $_.FullName }
