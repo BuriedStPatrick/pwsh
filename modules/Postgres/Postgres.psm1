@@ -14,11 +14,14 @@ function Install-PostgresClient($version) {
     }
 
     if (!$version) {
-        @('fzf') | ForEach-Object {
-            if (!(Test-Command $_)) {
-                Write-ErrorMessage "$_ not found in PATH, cannot suggest versions`nTry running this with a -version parameter. Like:`n`nInstall-PostgresClient -version `"13.4`""
-                return -1
-            }
+        if (!(Test-Module "FuzzyFinder")) {
+            Write-ErrorMessage "FuzzyFinder module is not enabled. Please enable it first."
+            return -1
+        }
+
+        if (!(Test-Command fzf)) {
+            Write-ErrorMessage "fzf not found in PATH, cannot suggest versions`nTry running this with a -version parameter. Like:`n`nInstall-PostgresClient -version `"13.4`""
+            return -1
         }
 
         Write-InfoMessage "Select version to install"
