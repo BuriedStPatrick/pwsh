@@ -71,7 +71,7 @@ function Remove-PostgresClient {
         return -1
     }
 
-    $binDir = Convert-Path(Join-Path(Get-Command "pg_dump.exe").Path "..")
+    $binDir = Convert-Path(Join-Path(Get-Command "psql").Path "..")
 
     if ((Read-Host "Remove installation at $($binDir)? [y/N]").ToLower() -eq "y") {
         Remove-Item $binDir -Recurse -Force
