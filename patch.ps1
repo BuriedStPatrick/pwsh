@@ -28,9 +28,7 @@ function Install-Pwsh {
         New-Item $pwshHomePath -ItemType Directory -Force
     }
 
-    $pwshrcDestination = $IsWindows `
-        ? (Join-Path $pwshHomePath "$($pwshrc.Name)")
-        : (Join-Path $pwshHomePath $pwshrc)
+    $pwshrcDestination = (Join-Path $pwshHomePath $pwshrc.Name)
 
     # Copy pwshrc
     Copy-Item -Force $pwshrc.FullName $pwshrcDestination
