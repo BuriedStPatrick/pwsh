@@ -16,7 +16,13 @@ function Invoke-EnsurePasswordStateHomeDir {
 function Update-PasswordLists($lists) {
     Invoke-EnsurePasswordStateHomeDir
 
-    $lists | Select-Object -Property PasswordListID,PasswordList | ConvertTo-Json > (Join-Path $env:PWSH_PASSWORDSTATE_HOME lists.json)
+    $lists | Select-Object -Property PasswordListID,PasswordList,TreePath | ConvertTo-Json > (Join-Path $env:PWSH_PASSWORDSTATE_HOME lists.json)
+}
+
+function Update-PasswordFolders($folders) {
+    Invoke-EnsurePasswordStateHomeDir
+
+    $folders | Select-Object -Property FolderID,TreePath | ConvertTo-Json > (Join-Path $env:PWSH_PASSWORDSTATE_HOME folders.json)
 }
 
 # Update passwords database
@@ -58,6 +64,18 @@ function Get-PasswordLists {
     return Get-Content $path | ConvertFrom-Json
 }
 
+function Get-PasswordFolders {
+    $path = (Join-Path $env:PWSH_PASSWORDSTATE_HOME folders.json)
+
+    if (!(Test-Path $path)) {
+        $folders = Invoke-PasswordStateFetchFolders
+
+        Update-PasswordFolders $folders
+    }
+
+    return Get-Content $path | ConvertFrom-Json
+}
+
 function Get-Passwords($listId) {
     $path = (Join-Path $env:PWSH_PASSWORDSTATE_HOME "$listId.json")
 
@@ -77,7 +95,9 @@ function Clear-Database {
 
 Export-ModuleMember -Function Update-PasswordLists
 Export-ModuleMember -Function Update-Passwords
+Export-ModuleMember -Function Update-Folders
 Export-ModuleMember -Function Invoke-UpdateDatabase
 Export-ModuleMember -Function Get-PasswordLists
+Export-ModuleMember -Function Get-PasswordFolders
 Export-ModuleMember -Function Get-Passwords
 Export-ModuleMember -Function Clear-Database

@@ -52,6 +52,33 @@ function Invoke-PasswordStateFetchPasswordLists {
     }
 }
 
+function Invoke-PasswordStateFetchFolders {
+    $folderListUrl = "$($config.baseUrl)/winapi/folders"
+    Write-Host $folderListUrl
+
+    if (!($env:UserDomain -eq $config.domain)) {
+        $Credentials = Get-PwmCredential
+    } else {
+        $Credentials = $null
+    }
+
+    try {
+        if ($null -eq $Credentials) {
+            return Invoke-Restmethod -Method GET -Uri "$folderListUrl" -UseDefaultCredentials
+        } else {
+            return Invoke-Restmethod -Method GET -Uri "$folderListUrl" -Credential $Credentials
+        }
+    } catch {
+        $statusCode = $_.Exception.Response.StatusCode.value__
+        if (($statusCode -eq 401) -or ($statusCode -eq 403)) {
+            Write-Error "You are not authorized to view folders."
+        } else {
+            Write-Error "Failed to fetch folders: $($_.Exception.Message)"
+            throw $_
+        }
+    }
+}
+
 function Invoke-PasswordStateFetchPasswords($listId) {
     $listUrl = "$($config.baseUrl)/winapi/passwords/$($listId)?QueryAll"
 
@@ -139,4 +166,5 @@ function Invoke-PasswordStateTransformFile {
 Export-ModuleMember -Function Invoke-PasswordStateFetchPassword
 Export-ModuleMember -Function Invoke-PasswordStateFetchPasswords
 Export-ModuleMember -Function Invoke-PasswordStateFetchPasswordLists
+Export-ModuleMember -Function Invoke-PasswordStateFetchFolders
 Export-ModuleMember -Function Invoke-PasswordStateTransformFile
