@@ -1,3 +1,5 @@
+Import-Module (Join-Path $env:PWSH_HOME modules PSYaml PSYaml)
+
 Function Join-Object {
     <#
     .description
@@ -33,27 +35,17 @@ Function Join-Object {
 }
 
 function Get-Config {
-    $defaultConfigText = (Test-Path (Join-Path $env:PWSH_HOME pwsh.jsonc)) `
-        ? (Get-Content (Join-Path $env:PWSH_HOME pwsh.jsonc))
-        : $null
-
-    if (!($null -eq $defaultConfigText)) {
-        $defaultConfig = $defaultConfigText | ConvertFrom-Json
+    $defaultConfigPath = (Join-Path $env:PWSH_HOME pwsh.yaml)
+    if (Test-Path($defaultConfigPath)) {
+        $defaultConfig = ConvertFrom-Yaml = $defaultConfigPath
     }
 
-    $userConfigText = (Test-Path $env:PWSH_CONFIG) `
-        ? (Get-Content $env:PWSH_CONFIG)
-        : $null
-
-    if (!($null -eq $userConfigText)) {
-        $userConfig = $userConfigText | ConvertFrom-Json
+    $userConfigPath = (Join-Path $env:PWSH_HOME pwsh.yaml)
+    if (Test-Path($userConfigPath)) {
+        $userConfig = ConvertFrom-Yaml = $userConfigPath
     }
 
-    if (!($null -eq $userConfig)) {
-        return Join-Object $defaultConfig $userConfig
-    } else {
-        return $defaultConfig
-    }
+    return ($null -eq $userConfig) ? (Join-Object $defaultConfig $userConfig) : $defaultConfig
 }
 
 # Keybinds

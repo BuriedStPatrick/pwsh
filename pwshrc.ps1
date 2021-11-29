@@ -12,14 +12,14 @@ function Invoke-EnvironmentVariables() {
     }
 
     $env:PWSH_HOME = $env:PWSH_HOME ?? (Join-Path $HOME pwsh)
-    $env:PWSH_CONFIG = $env:PWSH_CONFIG ?? (Join-Path $pwshConfigDir pwsh.jsonc)
+    $env:PWSH_CONFIG = $env:PWSH_CONFIG ?? (Join-Path $pwshConfigDir pwsh.yaml)
     $env:EDITOR = $env:EDITOR ?? 'nvim'
 }
 
 function Invoke-InitScripts {
     # Load init scripts
     Get-ChildItem (Join-Path $env:PWSH_HOME init\*.ps1) -File `
-        | Where-Object { !($_.Name.Replace(".ps1", "") -in $pwshConfig.disableInit)} `
+        | Where-Object { !($_.Name.Replace(".ps1", "") -in $pwshConfig.init.disabled)} `
         | ForEach-Object { . $_.FullName }
 }
 

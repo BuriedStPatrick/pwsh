@@ -39,8 +39,8 @@ function Install-Pwsh {
     # Copy modules
     Copy-Item -Recurse -Force (Join-Path $thisDirectory modules) $pwshHomePath
 
-    # Copy default pwsh.jsonc
-    Copy-Item -Force (Join-Path $thisDirectory pwsh.jsonc) $pwshHomePath
+    # Copy default pwsh.yaml
+    Copy-Item -Force (Join-Path $thisDirectory pwsh.yaml) $pwshHomePath
 
     # Source pwshrc in profile automatically?
     $profileText = Get-Content $PROFILE
@@ -77,7 +77,7 @@ function Invoke-EnsurePwshConfigDir {
 function Install-EmptyConfig {
     $ErrorActionPreference = 'Stop'
     $pwshConfigDir = Invoke-EnsurePwshConfigDir
-    $pwshUserConfigPath = (Join-Path $pwshConfigDir pwsh.jsonc)
+    $pwshUserConfigPath = (Join-Path $pwshConfigDir pwsh.yaml)
 
     if (!(Test-Path($pwshUserConfigPath))) {
         New-Item $pwshUserConfigPath
@@ -92,14 +92,14 @@ function Install-DefaultConfig {
     $ErrorActionPreference = 'Stop'
 
     $pwshConfigDir = Invoke-EnsurePwshConfigDir
-    $pwshUserConfigPath = (Join-Path $pwshConfigDir pwsh.jsonc)
+    $pwshUserConfigPath = (Join-Path $pwshConfigDir pwsh.yaml)
 
     if (!(Test-Path($pwshUserConfigPath))) {
-        # Copy default pwsh.jsonc
-        Copy-Item (Join-Path $thisDirectory pwsh.jsonc) $pwshConfigDir
+        # Copy default pwsh.yaml
+        Copy-Item (Join-Path $thisDirectory pwsh.yaml) $pwshConfigDir
         Write-OkMessage "Added config to $pwshConfigDir"
     } elseif ((Read-Boolean "Config file already exists. Replace?")) {
-        Copy-Item (Join-Path $thisDirectory pwsh.jsonc) $pwshConfigDir -Force
+        Copy-Item (Join-Path $thisDirectory pwsh.yaml) $pwshConfigDir -Force
         Write-OkMessage "Replaced $pwshUserConfigPath with default config"
     }
 }
@@ -125,7 +125,7 @@ function Uninstall-Pwsh {
         ? (Join-Path $env:LOCALAPPDATA pwsh)
         : (Join-Path $HOME .config pwsh)
 
-    if (Test-Path(Join-Path $pwshConfigDir .\pwsh.jsonc)) {
+    if (Test-Path(Join-Path $pwshConfigDir .\pwsh.yaml)) {
         $keepConfig = Read-Boolean "Keep config?"
 
         if (!$keepConfig) {
@@ -133,6 +133,10 @@ function Uninstall-Pwsh {
         }
     }
 }
+
+# Init any git submodules
+git submodule init
+git submodule update
 
 $option = Read-Host "Pick an option`n(1) Install`n(2) Uninstall`n(3) Install default config`n(4) Install empty config`n"
 

@@ -1,0 +1,70 @@
+# Will disable init scripts under ./init, effectively not loading them
+# Include the name of the script as a string (without file-extension)
+init:
+  disabled:
+    - ssh
+
+# Unique configurations for each module in ./modules
+# "disabled"   => The module will not be loaded
+# "config"     => The module will be loaded with the given configuration
+modules:
+  FuzzyFinder:
+    disabled:
+    config:
+  Ssh:
+    disabled:
+    config:
+      # If enabled, looks for private keys inside $HOME/.ssh and attempts to add them to the session
+      # Recommended if you use Git a lot with SSH unless you like typing passwords all the time
+      loadKeysOnStarup: true
+  Dotnet:
+    disabled:
+    config:
+  Git:
+    disabled:
+    config:
+  Lf:
+    disabled:
+    config:
+  Misc:
+    disabled:
+    config:
+  Config:
+    disabled:
+    config:
+  Prompt:
+    disabled:
+    config:
+      # The shell prompt to invoke
+      # Options:
+      # none | custom | starship | omp
+      prompt: "starship"
+      custom:
+        # Path to the custom prompt script
+        # TODO: WiP, not active yet
+        scriptPath:
+      starship:
+        # Path to the starship config TOML file
+        # TODO: WiP, not active yet
+        configPath:
+      omp:
+        # Name of the Oh-My-Posh theme to use
+        # Print available themes with Write-OhMyPoshThemePreviews
+        theme: "marcduiker"
+  Vim:
+    disabled:
+    config:
+      # Sets vim (or neovim) as the default $env:EDITOR
+      # This will be moved to a generalized option in the future
+      setDefaultEditor: true
+
+      # Aliases vim so that it points to nvim instead
+      useNeovim: true
+  PasswordState:
+    disabled:
+    config:
+      baseUrl:
+      domain:
+  Postgres:
+    disabled:
+    config:

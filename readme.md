@@ -33,11 +33,11 @@ Once you're running with the profile-script, you can check your current configur
 
 ```powershell
 # Simply output the config in the terminal
-cat $env:PWSH_HOME/pwsh.jsonc
+cat $env:PWSH_HOME/pwsh.yaml
 
 # Open with a text editor
-notepad $env:PWSH_HOME/pwsh.jsonc
-vim $env:PWSH_HOME/pwsh.jsonc
+notepad $env:PWSH_HOME/pwsh.yaml
+vim $env:PWSH_HOME/pwsh.yaml
 ```
 
 Do *NOT* edit the file. It will work, but I highly recommend creating a separate config-file and placing it inside `$env:PWSH_CONFIG`. This way, you can override only the options you're interested in and leave the default values out of your own configs. You can always see the finalized config via `Get-Config`.
@@ -56,7 +56,7 @@ These are all the keybindings I've set:
 
 |  Binding | Module        | Does                                                                                                                                                                                                                   |
 |----------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Ctrl+.` | Core          | Opens the user's `pwsh.jsonc` config file with the default `$env:EDITOR`                                                                                                                                               |
+| `Ctrl+.` | Core          | Opens the user's `pwsh.yaml` config file with the default `$env:EDITOR`                                                                                                                                               |
 | `Ctrl+f` | FuzzyFinder   | Runs `fzf` in the current directory, navigate with arrows/text search. On exit, cd's into the directory. If a file is selected, opens that file with the default app.                                                  |
 | `Ctrl+h` | Misc          | Navigates to `$HOME`                                                                                                                                                                                                   |
 | `Ctrl+~` | Misc          | Navigates to `$HOME`                                                                                                                                                                                                   |
