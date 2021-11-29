@@ -15,17 +15,17 @@ function Write-Message($prefix, $prefixForeground, $prefixBackground, $message) 
 }
 
 function Write-OkMessage($message) {
-    Write-Message "[OK]" Black Green $message
+    Write-Message " OK " Black Green $message
 }
 
 function Write-InfoMessage($message) {
-    Write-Message "[INFO]" Black Blue $message
+    Write-Message " INFO " Black Blue $message
 }
 
 function Write-WarningMessage($message) {
-    Write-Message "[WARN]" Black Yellow $message
+    Write-Message " WARN " Black Yellow $message
 }
 
 function Write-ErrorMessage($message) {
-    Write-Message "[ERR]" Black Red $message
+    Write-Message " ERR " Black Red $message
 }
