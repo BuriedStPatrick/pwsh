@@ -9,31 +9,31 @@ init:
 # "config"     => The module will be loaded with the given configuration
 modules:
   FuzzyFinder:
-    disabled:
+    disabled: false
     config:
   Ssh:
-    disabled:
+    disabled: false
     config:
       # If enabled, looks for private keys inside $HOME/.ssh and attempts to add them to the session
       # Recommended if you use Git a lot with SSH unless you like typing passwords all the time
       loadKeysOnStarup: true
   Dotnet:
-    disabled:
+    disabled: false
     config:
   Git:
-    disabled:
+    disabled: false
     config:
   Lf:
-    disabled:
+    disabled: false
     config:
   Misc:
-    disabled:
+    disabled: false
     config:
   Config:
-    disabled:
+    disabled: false
     config:
   Prompt:
-    disabled:
+    disabled: false
     config:
       # The shell prompt to invoke
       # Options:
@@ -52,7 +52,7 @@ modules:
         # Print available themes with Write-OhMyPoshThemePreviews
         theme: "marcduiker"
   Vim:
-    disabled:
+    disabled: false
     config:
       # Sets vim (or neovim) as the default $env:EDITOR
       # This will be moved to a generalized option in the future
@@ -61,10 +61,10 @@ modules:
       # Aliases vim so that it points to nvim instead
       useNeovim: true
   PasswordState:
-    disabled:
+    disabled: false
     config:
       baseUrl:
       domain:
   Postgres:
-    disabled:
+    disabled: false
     config:
