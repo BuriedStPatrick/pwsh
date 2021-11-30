@@ -2,7 +2,7 @@
 # Include the name of the script as a string (without file-extension)
 init:
   disabled:
-    - ssh
+    # - ssh
 
 # Unique configurations for each module in ./modules
 # "disabled"   => The module will not be loaded
