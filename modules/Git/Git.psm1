@@ -117,3 +117,25 @@ Function Invoke-GitWorkingStatus {
 Function Invoke-GitDeleteBranch {
     git branch @args -d
 }
+
+Function Invoke-DeleteBranchesWithNoRemote {
+    $branches = (git fetch -p && git branch -vv | awk '/: gone]/{print $1}')
+
+    if ($branches.Length -gt 0) {
+        Write-Host "Stale branches to delete (no origin):`n"
+        $branches | ForEach-Object { Write-Host $_ }
+        Write-Host
+
+        if ((Read-Boolean "OK?")) {
+            $branches | ForEach-Object {
+                git branch -D $_
+            }
+
+            Write-OkMessage "Deleted all stale branches"
+        } else {
+            Write-InfoMessage "Aborted"
+        }
+    } else {
+        Write-InfoMessage "No stale branches to delete"
+    }
+}
