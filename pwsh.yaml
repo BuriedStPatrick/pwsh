@@ -68,3 +68,6 @@ modules:
   Postgres:
     disabled: false
     config:
+  Kubectl:
+    disabled: false
+    config:
