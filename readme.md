@@ -56,7 +56,7 @@ These are all the keybindings I've set:
 
 |  Binding | Module        | Does                                                                                                                                                                                                                   |
 |----------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Ctrl+.` | Core          | Opens the user's `pwsh.yaml` config file with the default `$env:EDITOR`                                                                                                                                               |
+| `Ctrl+.` | Core          | Opens the user's `pwsh.yaml` config file with the default `$env:EDITOR`                                                                                                                                                |
 | `Ctrl+f` | FuzzyFinder   | Runs `fzf` in the current directory, navigate with arrows/text search. On exit, cd's into the directory. If a file is selected, opens that file with the default app.                                                  |
 | `Ctrl+h` | Misc          | Navigates to `$HOME`                                                                                                                                                                                                   |
 | `Ctrl+~` | Misc          | Navigates to `$HOME`                                                                                                                                                                                                   |
@@ -65,6 +65,7 @@ These are all the keybindings I've set:
 | `Ctrl+g` | Git           | Starts `gitui` in the current directory                                                                                                                                                                                |
 | `Ctrl+b` | Git           | Looks for local branches and, pipes into `fzf`. On selected branch, performs `git checkout` on that branch.                                                                                                            |
 | `Ctrl+m` | Git           | Looks for local branches and, pipes into `fzf`. On selected branch, performs `git merge` on that branch.                                                                                                               |
+| `Ctrl+k` | Kubectl       | Switch current kubectl context using `fzf`.                                                                                                                                                                            |
 
 ## Environment variables
 
