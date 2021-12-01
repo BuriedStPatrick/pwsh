@@ -1,56 +1,56 @@
 Import-Module (Join-Path $env:PWSH_HOME modules PSYaml PSYaml)
 
-Function Join-Object {
-    <#
-    .description
-        Copy and append BaseObject with new values from UpdateObject (Does not mutate BaseObject)
-    #>
-    [cmdletbinding()]
-    param(
-        [Parameter(Mandatory, Position = 0)]
-        [PSCustomObject]$BaseObject,
-
-        [Parameter(Mandatory, Position = 1)]
-        [PSCustomObject]$UpdateObject
-    )
-
-    if ($null -eq $BaseObject) {
-        return $UpdateObject
-    }
-
-    $NewObject = $BaseObject.psobject.copy()
-    $UpdateObject.psobject.properties | ForEach-Object {
-        $PropName = $_.Name
-        $Value = $_.Value
-
-        if ($null -eq $NewObject.$PropName) {
-            $NewObject | Add-Member -NotePropertyName $PropName -NotePropertyValue $Value
-        } else {
-
-            $NewObject.($PropName) = $Value
+function ConvertTo-Object($dictionary) {
+    $dictionary | ForEach-Object {
+        $props = @{}
+        $_.GetEnumerator() | ForEach-Object {
+            $props[$_.Key] = $_.Value
         }
-    }
 
-    $NewObject
+        $props | Where-Object { $_.GetType() -eq "OrderedDictionary" } | ForEach-Object {
+            write-host $_
+        }
+
+        return [PSCustomObject]$props
+    }
 }
 
 function Get-Config {
-    $defaultConfigPath = (Join-Path $env:PWSH_HOME pwsh.yaml)
-    if (Test-Path($defaultConfigPath)) {
-        $defaultConfig = ConvertFrom-Yaml = $defaultConfigPath
-    }
-
+    $cachedConfigPath = (Join-Path $env:PWSH_CACHE pwsh.yaml)
     $userConfigPath = (Join-Path $env:PWSH_HOME pwsh.yaml)
-    if (Test-Path($userConfigPath)) {
-        $userConfig = ConvertFrom-Yaml = $userConfigPath
+
+    if ((Test-Path $userConfigPath)) {
+        if (!(Test-Command yq)) {
+            Write-FatalMessage "yq is required"
+            return
+        }
+
+        yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' (Join-Path $env:PWSH_HOME .\pwsh.yaml) $env:PWSH_CONFIG > $cachedConfigPath
+        $configPath = $cachedConfigPath
+    } else {
+        $configPath = (Join-Path $env:PWSH_HOME pwsh.yaml)
     }
 
-    return ($null -eq $userConfig) ? (Join-Object $defaultConfig $userConfig) : $defaultConfig
+    return ConvertTo-Object (ConvertFrom-Yaml -Path $configPath)
+}
+
+function Edit-UserConfig {
+    if (!(Test-Path $env:PWSH_CONFIG)) {
+        Write-WarningMessage "User config not found at '$env:PWSH_CONFIG'"
+        if (!(Read-Boolean "Create?")) {
+            Write-InfoMessage "Aborted"
+            return
+        }
+
+        Copy-Item (Join-Path $env:PWSH_HOME pwsh.yaml) $env:PWSH_CONFIG -Force
+    }
+
+    "$env:EDITOR $env:PWSH_CONFIG" | Invoke-Expression
 }
 
 # Keybinds
 Set-PSReadLineKeyHandler -Chord Ctrl+. -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('"$env:EDITOR $env:PWSH_CONFIG" | Invoke-Expression')
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('Edit-UserConfig')
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }

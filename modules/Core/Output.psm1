@@ -29,3 +29,7 @@ function Write-WarningMessage($message) {
 function Write-ErrorMessage($message) {
     Write-Message " ERR " Black Red $message
 }
+
+function Write-FatalMessage($message) {
+    Write-Message " FATAL " Black Red $message
+}

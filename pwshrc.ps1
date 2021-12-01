@@ -12,8 +12,17 @@ function Invoke-EnvironmentVariables() {
     }
 
     $env:PWSH_HOME = $env:PWSH_HOME ?? (Join-Path $HOME pwsh)
+    $env:PWSH_CACHE = $env:PWSH_CACHE ?? (Join-Path $HOME .cache pwsh)
     $env:PWSH_CONFIG = $env:PWSH_CONFIG ?? (Join-Path $pwshConfigDir pwsh.yaml)
     $env:EDITOR = $env:EDITOR ?? 'nvim'
+}
+
+function Invoke-EnsureEssentialDirectories {
+    @($env:PWSH_HOME, $env:PWSH_CACHE) | ForEach-Object {
+        if (!(Test-Path $_)) {
+            New-Item -ItemType Directory -Path $_ -Force | Out-Null
+        }
+    }
 }
 
 function Invoke-InitScripts {
@@ -44,6 +53,9 @@ function Invoke-Modules {
 
 # Load environment variables
 Invoke-EnvironmentVariables
+
+# Ensure essential dirs exist
+Invoke-EnsureEssentialDirectories
 
 # Load modules
 Invoke-Modules

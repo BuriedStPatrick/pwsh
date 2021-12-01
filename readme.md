@@ -24,6 +24,7 @@ In case you want everything to work and not have to tweak, make sure you have fo
 * `vim` and/or `neovim`
 * `openssh` (Only tested on Windows so far)
 * `dotnet`
+* `yq` (Required for combing user config with default config)
 
 None of these are required, but some module features will not work without them.
 
