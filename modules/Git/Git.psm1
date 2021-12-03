@@ -118,7 +118,7 @@ Function Invoke-GitDeleteBranch {
     git branch @args -d
 }
 
-Function Invoke-DeleteBranchesWithNoRemote {
+Function Invoke-GitDeleteBranchesWithNoRemote {
     $branches = (git fetch -p && git branch -vv | awk '/: gone]/{print $1}')
 
     if ($branches.Length -gt 0) {
