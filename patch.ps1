@@ -33,9 +33,6 @@ function Install-Pwsh {
     # Copy pwshrc
     Copy-Item -Force $pwshrc.FullName $pwshrcDestination
 
-    # Copy init-scripts
-    Copy-Item -Recurse -Force (Join-Path $thisDirectory init) $pwshHomePath
-
     # Copy modules
     Copy-Item -Recurse -Force (Join-Path $thisDirectory modules) $pwshHomePath
 

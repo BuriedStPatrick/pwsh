@@ -1,4 +1,3 @@
-# TODO: Move this code into a module
 $sshConfig = (Get-Config).modules.Ssh
 if($sshConfig.disabled) {
     return
@@ -48,9 +47,10 @@ if ($IsWindows) {
 }
 
 # For each ssh-agent connection, add the specified public key to the agent.
-if ($sshConfig.config.loadKeysOnStartup) {
+if ($sshConfig.config.keys.Length -gt 0) {
+    $keys = $sshConfig.config.keys | ForEach-Object { Get-Item $_ }
     $currentlyAddedSshKeys = $(ssh-add -l)?.Split(" ")?[3]?.Replace("(", "").Replace(")", "").ToLower() ?? @()
-    Get-ChildItem -Path $HOME/.ssh/id_* -Recurse `
-        | Where-Object { !($_.Extension -like '.pub') -and !($_.Name.Replace("id_","").ToLower() -in $currentlyAddedSshKeys) } `
-        | ForEach-Object { ssh-add $_.FullName }
+    $keys | Where-Object { !($_.Name.Replace("id_", "") -in $currentlyAddedSshKeys) } | ForEach-Object {
+        ssh-add $_.FullName
+    }
 }

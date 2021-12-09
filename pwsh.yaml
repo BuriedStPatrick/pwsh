@@ -1,9 +1,3 @@
-# Will disable init scripts under ./init, effectively not loading them
-# Include the name of the script as a string (without file-extension)
-init:
-  disabled:
-    # - ssh
-
 # Unique configurations for each module in ./modules
 # "disabled"   => The module will not be loaded
 # "config"     => The module will be loaded with the given configuration
@@ -14,9 +8,13 @@ modules:
   Ssh:
     disabled: false
     config:
-      # If enabled, looks for private keys inside $HOME/.ssh and attempts to add them to the session
-      # Recommended if you use Git a lot with SSH unless you like typing passwords all the time
-      loadKeysOnStarup: true
+      # List of paths to SSH keys to load on shell init
+      # Default: empty
+      # Example:
+      # keys:
+      #   - ~/.ssh/id_bitbucket
+      #   - ~/.ssh/id_github
+      keys:
   Dotnet:
     disabled: false
     config:

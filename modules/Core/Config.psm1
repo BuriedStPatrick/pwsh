@@ -1,5 +1,3 @@
-Import-Module (Join-Path $env:PWSH_HOME modules PSYaml PSYaml)
-
 function ConvertTo-Object($dictionary) {
     $dictionary | ForEach-Object {
         $props = @{}
@@ -16,6 +14,8 @@ function ConvertTo-Object($dictionary) {
 }
 
 function Get-Config {
+    Import-Module (Join-Path $env:PWSH_HOME modules PSYaml PSYaml)
+
     $cachedConfigPath = (Join-Path $env:PWSH_CACHE pwsh.yaml)
     $userConfigPath = (Join-Path $env:PWSH_HOME pwsh.yaml)
 
@@ -31,7 +31,10 @@ function Get-Config {
         $configPath = (Join-Path $env:PWSH_HOME pwsh.yaml)
     }
 
-    return ConvertTo-Object (ConvertFrom-Yaml -Path $configPath)
+    $obj = ConvertTo-Object (ConvertFrom-Yaml -Path $configPath)
+    Remove-Module PSYaml
+
+    return $obj
 }
 
 function Edit-UserConfig {

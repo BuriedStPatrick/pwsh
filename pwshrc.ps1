@@ -25,13 +25,6 @@ function Invoke-EnsureEssentialDirectories {
     }
 }
 
-function Invoke-InitScripts {
-    # Load init scripts
-    Get-ChildItem (Join-Path $env:PWSH_HOME init\*.ps1) -File `
-        | Where-Object { !($_.Name.Replace(".ps1", "") -in $pwshConfig.init.disabled)} `
-        | ForEach-Object { . $_.FullName }
-}
-
 function Invoke-Modules {
     # Load the core module
     Get-ChildItem (Join-Path $env:PWSH_HOME modules\Core\*.psm1) -File `
@@ -59,9 +52,6 @@ Invoke-EnsureEssentialDirectories
 
 # Load modules
 Invoke-Modules
-
-# Load init scripts
-Invoke-InitScripts
 
 # Start prompt
 Invoke-Prompt
