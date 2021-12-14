@@ -7,6 +7,7 @@ $endBlock   = "# > PWSH"
 function New-PowershellProfile {
     $ErrorActionPreference = 'Stop'
     $unixPath = Join-Path $HOME .config powershell
+
     if (!$IsWindows -and !(Test-Path($unixPath))) {
         New-Item $unixPath -ItemType Directory -Force
     }

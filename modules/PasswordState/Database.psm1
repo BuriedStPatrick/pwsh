@@ -7,8 +7,8 @@
 
 # Ensure PasswordState home directory has been created
 function Invoke-EnsurePasswordStateHomeDir {
-    if (!(Test-Path $env:PWSH_PASSWORDSTATE_HOME)) {
-        New-Item $env:PWSH_PASSWORDSTATE_HOME -ItemType Directory -Force
+    if (!(Test-Path $env:PWSH_PASSWORDSTATE_CACHE)) {
+        New-Item $env:PWSH_PASSWORDSTATE_CACHE -ItemType Directory -Force
     }
 }
 
@@ -16,20 +16,20 @@ function Invoke-EnsurePasswordStateHomeDir {
 function Update-PasswordLists($lists) {
     Invoke-EnsurePasswordStateHomeDir
 
-    $lists | Select-Object -Property PasswordListID,PasswordList,TreePath | ConvertTo-Json > (Join-Path $env:PWSH_PASSWORDSTATE_HOME lists.json)
+    $lists | Select-Object -Property PasswordListID,PasswordList,TreePath | ConvertTo-Json > (Join-Path $env:PWSH_PASSWORDSTATE_CACHE lists.json)
 }
 
 function Update-PasswordFolders($folders) {
     Invoke-EnsurePasswordStateHomeDir
 
-    $folders | Select-Object -Property FolderID,TreePath | ConvertTo-Json > (Join-Path $env:PWSH_PASSWORDSTATE_HOME folders.json)
+    $folders | Select-Object -Property FolderID,TreePath | ConvertTo-Json > (Join-Path $env:PWSH_PASSWORDSTATE_CACHE folders.json)
 }
 
 # Update passwords database
 function Update-Passwords($listId, $passwords) {
     Invoke-EnsurePasswordStateHomeDir
 
-    $passwords | Select-Object -Property PasswordID,Title | ConvertTo-Json > (Join-Path $env:PWSH_PASSWORDSTATE_HOME "$listId.json")
+    $passwords | Select-Object -Property PasswordID,Title | ConvertTo-Json > (Join-Path $env:PWSH_PASSWORDSTATE_CACHE "$listId.json")
 }
 
 # Update all passwords in database
@@ -53,7 +53,7 @@ function Invoke-UpdateDatabase {
 }
 
 function Get-PasswordLists {
-    $path = (Join-Path $env:PWSH_PASSWORDSTATE_HOME lists.json)
+    $path = (Join-Path $env:PWSH_PASSWORDSTATE_CACHE lists.json)
 
     if (!(Test-Path $path)) {
         $lists = Invoke-PasswordStateFetchPasswordLists
@@ -65,7 +65,7 @@ function Get-PasswordLists {
 }
 
 function Get-PasswordFolders {
-    $path = (Join-Path $env:PWSH_PASSWORDSTATE_HOME folders.json)
+    $path = (Join-Path $env:PWSH_PASSWORDSTATE_CACHE folders.json)
 
     if (!(Test-Path $path)) {
         $folders = Invoke-PasswordStateFetchFolders
@@ -77,7 +77,7 @@ function Get-PasswordFolders {
 }
 
 function Get-Passwords($listId) {
-    $path = (Join-Path $env:PWSH_PASSWORDSTATE_HOME "$listId.json")
+    $path = (Join-Path $env:PWSH_PASSWORDSTATE_CACHE "$listId.json")
 
     if (!(Test-Path $path)) {
         $passwords = Invoke-PasswordStateFetchPasswords $listId
@@ -90,7 +90,7 @@ function Get-Passwords($listId) {
 
 # Clear the database of passwords
 function Clear-Database {
-    Get-ChildItem (Join-Path $env:PWSH_PASSWORDSTATE_HOME "*.json") | Remove-Item
+    Get-ChildItem (Join-Path $env:PWSH_PASSWORDSTATE_CACHE "*.json") | Remove-Item
 }
 
 Export-ModuleMember -Function Update-PasswordLists

@@ -1,1 +1,1 @@
-$env:PWSH_PASSWORDSTATE_HOME=(Join-Path $env:PWSH_HOME PasswordState)
+$env:PWSH_PASSWORDSTATE_CACHE=(Join-Path $env:PWSH_CACHE PasswordState)
