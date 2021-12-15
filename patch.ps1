@@ -2,7 +2,7 @@ $env:PWSH_REPO = $env:PWSH_REPO ?? (Split-Path -Parent $MyInvocation.MyCommand.D
 $env:PWSH_HOME = $env:PWSH_HOME ?? (Join-Path $HOME pwsh)
 Import-Module (Join-Path $env:PWSH_REPO modules Core Output.psm1)
 
-$endBlock   = "# > PWSH"
+$endBlock = "# > PWSH"
 
 function New-PowershellProfile {
     $ErrorActionPreference = 'Stop'
