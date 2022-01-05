@@ -1,5 +1,5 @@
 $sshConfig = (Get-Config).modules.Ssh
-if($sshConfig.disabled) {
+if ($sshConfig.disabled) {
     return
 }
 
@@ -18,20 +18,23 @@ function Set-GitEnvironmentVars {
 
 function Start-OpenSshAgent {
     if (!(Get-Process | Where-Object { $_.Name -eq 'ssh-agent'})) {
-        $startupType = (Get-Service ssh-agent).StartType
-        switch($startupType) {
-            "Disabled" {
-                if(!(Test-IsAdministrator)) {
-                    Write-ErrorMessage "Your OpenSSH Authentication Agent service is Disabled, need to change into StarupType: Manual, please try again as admin!"
-                } else {
-                    Write-InfoMessage "Set OpenSSH Authentication Agent service to manual, was disabled."
-                    Get-Service ssh-agent | Set-Service -StartupType "Manual"
-                }
-            }
-            "Stopped" {
-                Get-Service ssh-agent | Start-Service
+        $service = Get-Service ssh-agent
+
+        if ($service.StartType -eq "Disabled") {
+            if(!(Test-IsAdministrator)) {
+                Write-ErrorMessage "Your OpenSSH Authentication Agent service is Disabled, need to change into StarupType: Manual, please try again as admin!"
+            } else {
+                Write-InfoMessage "Set OpenSSH Authentication Agent service StartupType to 'Manual'. Was '$($service.StartType)'."
+                Get-Service ssh-agent | Set-Service -StartupType "Manual"
             }
         }
+
+        if ($service.Status -eq "Stopped") {
+            Get-Service ssh-agent | Start-Service
+            return $true
+        }
+
+        return $false
     }
 }
 
@@ -40,17 +43,17 @@ Set-GitEnvironmentVars
 
 # If running in Windows, start the OpenSSH agent service if it's not already running.
 if ($IsWindows) {
-    Start-OpenSshAgent
+    if((Start-OpenSshAgent)) {
+        # For each ssh-agent connection, add the specified public key to the agent.
+        if ($sshConfig.config.keys.Length -gt 0) {
+            $keys = $sshConfig.config.keys | ForEach-Object { Get-Item $_ }
+            $currentlyAddedSshKeys = $(ssh-add -l)?.Split(" ")?[3]?.Replace("(", "").Replace(")", "").ToLower() ?? @()
+            $keys | Where-Object { !($_.Name.Replace("id_", "") -in $currentlyAddedSshKeys) } | ForEach-Object {
+                ssh-add $_.FullName
+            }
+        }
+    }
 } else {
     Write-ErrorMessage "Ssh-agent isn't support on non-Windows OS'es yet. Still working on it!"
     return
-}
-
-# For each ssh-agent connection, add the specified public key to the agent.
-if ($sshConfig.config.keys.Length -gt 0) {
-    $keys = $sshConfig.config.keys | ForEach-Object { Get-Item $_ }
-    $currentlyAddedSshKeys = $(ssh-add -l)?.Split(" ")?[3]?.Replace("(", "").Replace(")", "").ToLower() ?? @()
-    $keys | Where-Object { !($_.Name.Replace("id_", "") -in $currentlyAddedSshKeys) } | ForEach-Object {
-        ssh-add $_.FullName
-    }
 }

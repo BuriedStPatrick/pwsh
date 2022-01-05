@@ -146,4 +146,3 @@ switch($option) {
         Write-ErrorMessage "Invalid option"
     }
 }
-

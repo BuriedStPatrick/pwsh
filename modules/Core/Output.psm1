@@ -2,7 +2,7 @@
     This module contains Core functionality used by other modules and should not be disabled.
 #>
 function Read-Boolean($prompt) {
-    Write-Host "[Y/n]" -ForegroundColor Black -BackgroundColor Blue -NoNewline
+    Write-Host " Y/n " -ForegroundColor Black -BackgroundColor Blue -NoNewline
     $value = (Read-Host " $prompt") 
 
     return "" -eq $value -or $value.ToLower() -match '^y(es)?$'
