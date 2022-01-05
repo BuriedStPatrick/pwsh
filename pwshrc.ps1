@@ -1,3 +1,5 @@
+$env:PWSH_REPO = $env:PWSH_REPO ?? (Split-Path -Parent $MyInvocation.MyCommand.Definition)
+
 function Invoke-EnvironmentVariables() {
     $pwshConfigDir = $IsWindows `
         ? (Join-Path $env:LOCALAPPDATA pwsh) `
@@ -27,7 +29,7 @@ function Invoke-EnsureEssentialDirectories {
 
 function Invoke-Modules {
     # Load the core module
-    Get-ChildItem (Join-Path $env:PWSH_HOME modules\Core\*.psm1) -File `
+    Get-ChildItem (Join-Path $env:PWSH_REPO modules\Core\*.psm1) -File `
         | ForEach-Object { Import-Module $_.FullName }
 
     $pwshConfig = Get-Config
@@ -38,7 +40,7 @@ function Invoke-Modules {
         | Select-Object -ExpandProperty Name
 
     # Load enabled feature modules
-    Get-ChildItem (Join-Path $env:PWSH_HOME modules) -Directory `
+    Get-ChildItem (Join-Path $env:PWSH_REPO modules) -Directory `
         | Where-Object { !($_.Name -eq "Core") -and  !($_.Name -in $disabledModules) } `
         | ForEach-Object { Get-ChildItem "$($_.FullName)\*.psm1" } `
         | ForEach-Object { Import-Module $_.FullName }

@@ -14,7 +14,7 @@ function ConvertTo-Object($dictionary) {
 }
 
 function Get-Config {
-    Import-Module (Join-Path $env:PWSH_HOME modules PSYaml PSYaml)
+    Import-Module (Join-Path $env:PWSH_REPO modules PSYaml PSYaml)
 
     $cachedConfigPath = (Join-Path $env:PWSH_CACHE pwsh.yaml)
     $userConfigPath = (Join-Path $env:PWSH_HOME pwsh.yaml)

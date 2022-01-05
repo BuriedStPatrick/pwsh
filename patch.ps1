@@ -1,6 +1,6 @@
-$thisDirectory = (Split-Path -Parent $MyInvocation.MyCommand.Definition)
+$env:PWSH_REPO = $env:PWSH_REPO ?? (Split-Path -Parent $MyInvocation.MyCommand.Definition)
 $env:PWSH_HOME = $env:PWSH_HOME ?? (Join-Path $HOME pwsh)
-Import-Module (Join-Path $thisDirectory modules Core Output.psm1)
+Import-Module (Join-Path $env:PWSH_REPO modules Core Output.psm1)
 
 $endBlock   = "# > PWSH"
 
@@ -21,40 +21,30 @@ function Install-Pwsh {
         New-PowershellProfile
     }
 
-    $pwshrc = Get-Item (Convert-Path (Join-Path $thisDirectory "pwshrc.ps1")).Replace("\", "/")
-    $pwshHomePath = Join-Path $HOME "pwsh"
+    $pwshrc = Get-Item (Convert-Path (Join-Path $env:PWSH_REPO "pwshrc.ps1")).Replace("\", "/")
 
-    if (!(Test-Path $pwshHomePath)) {
-        New-Item $pwshHomePath -ItemType Directory -Force
+    if (!(Test-Path $env:PWSH_HOME)) {
+        New-Item $env:PWSH_HOME -ItemType Directory -Force
     }
 
-    $pwshrcDestination = (Join-Path $pwshHomePath $pwshrc.Name)
-
-    # Copy pwshrc
-    Copy-Item -Force $pwshrc.FullName $pwshrcDestination
-
-    # Copy modules
-    Copy-Item -Recurse -Force (Join-Path $thisDirectory modules) $pwshHomePath
-
     # Copy default pwsh.yaml
-    Copy-Item -Force (Join-Path $thisDirectory pwsh.yaml) $pwshHomePath
+    Copy-Item -Force (Join-Path $env:PWSH_REPO pwsh.yaml) $env:PWSH_HOME
 
     # Source pwshrc in profile automatically?
     $profileText = Get-Content $PROFILE
     $containsSource = (Select-String -Path $PROFILE -Pattern $endBlock -SimpleMatch)
     if (!$containsSource) {
-        $sourceProfile = Read-Boolean "Source in profile?"
-        if ($sourceProfile) {
+        if ((Read-Boolean "Source in profile?")) {
             $profileText = Get-Content $PROFILE
 
             if (!($null -eq $profileText) -and $profileText.Contains($startBlock)) {
                 return
             }
 
-            $profileText = "$pwshrcDestination $endBlock"
+            $profileText = "$pwshrc $endBlock"
 
             Add-Content $PROFILE "`n. $($profileText)" -NoNewline
-            Write-InfoMessage "Sourced file in profile: $pwshrcDestination"
+            Write-InfoMessage "Sourced file in profile: $pwshrc"
         }
     }
 }
@@ -93,10 +83,10 @@ function Install-DefaultConfig {
 
     if (!(Test-Path($pwshUserConfigPath))) {
         # Copy default pwsh.yaml
-        Copy-Item (Join-Path $thisDirectory pwsh.yaml) $pwshConfigDir
+        Copy-Item (Join-Path $env:PWSH_REPO pwsh.yaml) $pwshConfigDir
         Write-OkMessage "Added config to $pwshConfigDir"
     } elseif ((Read-Boolean "Config file already exists. Replace?")) {
-        Copy-Item (Join-Path $thisDirectory pwsh.yaml) $pwshConfigDir -Force
+        Copy-Item (Join-Path $env:PWSH_REPO pwsh.yaml) $pwshConfigDir -Force
         Write-OkMessage "Replaced $pwshUserConfigPath with default config"
     }
 }
