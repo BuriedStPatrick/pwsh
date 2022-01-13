@@ -27,9 +27,6 @@ modules:
   Misc:
     disabled: false
     config:
-  Config:
-    disabled: false
-    config:
   Prompt:
     disabled: false
     config:
@@ -49,6 +46,11 @@ modules:
         # Name of the Oh-My-Posh theme to use
         # Print available themes with Write-OhMyPoshThemePreviews
         theme: "marcduiker"
+      # The list selector to use for interactive prompts
+      # Options:
+      # none | fzf
+      # Default: none
+      selector: none
   Vim:
     disabled: false
     config:
