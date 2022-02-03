@@ -82,6 +82,12 @@ Function Invoke-GitUndoCommit {
 Function Invoke-GitCreateBranch {
     git branch @args
     git checkout @args
+
+    $remote = (git remote | head -1)
+
+    if (Read-Boolean "Push to $remote as well?") {
+        git push -u $remote @args
+    }
 }
 
 Function Invoke-GitDeployTest {
@@ -115,7 +121,25 @@ Function Invoke-GitWorkingStatus {
 }
 
 Function Invoke-GitDeleteBranch {
-    git branch @args -d
+    $currentBranch = (git branch --show-current)
+    if ($currentBranch -eq $args[0]) {
+        Write-ErrorMessage "Cannot delete current branch. Please switch to a diffent branch first."
+        return;
+    }
+
+    git checkout $args[0] --quiet
+    $remote = (git status -sb --porcelain | Select-Object -first 1 | ForEach-Object { $_.Split("...") | Select-Object -last 1 })
+    $origin = (git remote | head -1)
+
+    git checkout $currentBranch --quiet
+    git branch -d $args[0] -D
+
+    $originExists = $remote -and !($remote.StartsWith("## "))
+
+    if ($originExists -and (Read-Boolean "Delete on $origin as well?")) {
+        Write-InfoMessage "Deleting $args on $origin"
+        git push $origin --delete $args
+    }
 }
 
 Function Invoke-GitDeleteBranchesWithNoRemote {
