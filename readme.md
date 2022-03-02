@@ -1,6 +1,6 @@
 # PWSH Profile
 
-A collection of configurable PowerShell modules. Individual modules can be turned on/off via a JSON configuration file.
+A collection of configurable PowerShell modules. Individual modules can be turned on/off via a YAML configuration file.
 
 ## Installation
 
