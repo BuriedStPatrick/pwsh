@@ -25,7 +25,7 @@ function Get-Config {
             return
         }
 
-        yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' (Join-Path $env:PWSH_HOME .\pwsh.yaml) $env:PWSH_CONFIG > $cachedConfigPath
+        yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' (Join-Path $env:PWSH_HOME .\pwsh.yaml) $env:PWSH_CONFIG | Format-EnvironmentVariables > $cachedConfigPath
         $configPath = $cachedConfigPath
     } else {
         $configPath = (Join-Path $env:PWSH_HOME pwsh.yaml)

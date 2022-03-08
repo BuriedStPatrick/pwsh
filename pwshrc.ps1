@@ -17,6 +17,7 @@ function Invoke-EnvironmentVariables() {
     $env:PWSH_CACHE = $env:PWSH_CACHE ?? (Join-Path $HOME .cache pwsh)
     $env:PWSH_CONFIG = $env:PWSH_CONFIG ?? (Join-Path $pwshConfigDir pwsh.yaml)
     $env:EDITOR = $env:EDITOR ?? 'nvim'
+    $env:HOME = $env:HOME ?? $env:USERPROFILE
 }
 
 function Invoke-EnsureEssentialDirectories {
@@ -46,6 +47,15 @@ function Invoke-Modules {
         | ForEach-Object { Import-Module $_.FullName }
 }
 
+function Invoke-Path {
+    $pwshConfig = Get-Config
+
+    $path = $env:Path.Split(";") | Where-Object { $_ } | Sort-Object | Get-Unique
+    $path += $pwshConfig.paths
+
+    $env:Path = [string]::Join(";", $path)
+}
+
 # Load environment variables
 Invoke-EnvironmentVariables
 
@@ -54,6 +64,9 @@ Invoke-EnsureEssentialDirectories
 
 # Load modules
 Invoke-Modules
+
+# Update PATH
+Invoke-Path
 
 # Start prompt
 Invoke-Prompt

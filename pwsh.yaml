@@ -71,3 +71,6 @@ modules:
   Kubectl:
     disabled: false
     config:
+
+paths:
+- ${HOME}/tools
