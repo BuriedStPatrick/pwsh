@@ -163,3 +163,8 @@ Function Invoke-GitDeleteBranchesWithNoRemote {
         Write-InfoMessage "No stale branches to delete"
     }
 }
+
+function Open-GitConfig {
+    $path = (Join-Path ($HOME ?? $env:HOME) ".gitconfig")
+    "$env:EDITOR $path" | Invoke-Expression
+}

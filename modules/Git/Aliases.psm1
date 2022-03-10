@@ -21,6 +21,7 @@ Set-Alias g-pl Invoke-GitPull;
 Set-Alias g-b Invoke-GitCheckout;
 Set-Alias g-db Invoke-GitDeleteBranch
 Set-Alias g-clean Invoke-GitCleanLocalBranches
+Set-Alias g-conf Open-GitConfig
 
 # Faster Aliases (possible conficts)
 Set-Alias cap Invoke-GitCommitAndPush;

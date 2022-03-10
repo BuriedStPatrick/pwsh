@@ -1,13 +1,13 @@
 $env:PWSH_REPO = $env:PWSH_REPO ?? (Split-Path -Parent $MyInvocation.MyCommand.Definition)
 
 function Invoke-EnvironmentVariables() {
-    $pwshConfigDir = $IsWindows `
+    $env:PWSH_CONFIG_DIR = $IsWindows `
         ? (Join-Path $env:LOCALAPPDATA pwsh) `
         : (Join-Path $HOME .config pwsh)
 
     $envOverrideFile = $IsWindows `
-        ? (Join-Path $pwshConfigDir pwshenv.ps1) `
-        : (Join-Path $pwshConfigDir pwshenv)
+        ? (Join-Path $env:PWSH_CONFIG_DIR pwshenv.ps1) `
+        : (Join-Path $env:PWSH_CONFIG_DIR pwshenv)
 
     if (Test-Path $envOverrideFile) {
         . $envOverrideFile
@@ -15,7 +15,7 @@ function Invoke-EnvironmentVariables() {
 
     $env:PWSH_HOME = $env:PWSH_HOME ?? (Join-Path $HOME pwsh)
     $env:PWSH_CACHE = $env:PWSH_CACHE ?? (Join-Path $HOME .cache pwsh)
-    $env:PWSH_CONFIG = $env:PWSH_CONFIG ?? (Join-Path $pwshConfigDir pwsh.yaml)
+    $env:PWSH_CONFIG = $env:PWSH_CONFIG ?? (Join-Path $env:PWSH_CONFIG_DIR pwsh.yaml)
     $env:EDITOR = $env:EDITOR ?? 'nvim'
     $env:HOME = $env:HOME ?? $env:USERPROFILE
 }

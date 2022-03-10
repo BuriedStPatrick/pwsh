@@ -45,7 +45,10 @@ function Edit-UserConfig {
             return
         }
 
-        Copy-Item (Join-Path $env:PWSH_HOME pwsh.yaml) $env:PWSH_CONFIG -Force
+        New-Item -ItemType Directory -Path $env:PWSH_CONFIG_DIR -Force
+
+        Copy-Item -Path (Join-Path $env:PWSH_REPO pwsh.yaml) `
+            -Destination $env:PWSH_CONFIG -Force
     }
 
     "$env:EDITOR $env:PWSH_CONFIG" | Invoke-Expression
