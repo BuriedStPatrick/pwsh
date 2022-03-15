@@ -10,9 +10,8 @@ function Set-KubectlCurrentContext($context) {
     kubectl config use-context $context
 }
 
-Set-PSReadLineKeyHandler -Chord Ctrl+k -ScriptBlock {
+Set-PSReadLineKeyHandler -Chord Ctrl+k -Description "Kubectl: Switch cluster context" -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
     [Microsoft.PowerShell.PSConsoleReadLine]::Insert('Invoke-KubectlFuzzySelectContext')
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
-    [Microsoft.PowerShell.PSConsoleReadLine]::ClearScreen()
 }

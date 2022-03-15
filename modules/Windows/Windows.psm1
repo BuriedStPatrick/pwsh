@@ -1,10 +1,13 @@
 function Invoke-Shutdown {
-    switch((Read-Option "Select option" @('shutdown', 'reboot'))) {
+    switch((Read-Option "Select option" @('shutdown', 'reboot', 'abort'))) {
         'shutdown' {
             $action = 'shutdown /s'
         }
         'reboot' {
             $action = 'shutdown /r'
+        }
+        'abort' {
+            $action = 'shutdown /a'
         }
     }
 
@@ -13,7 +16,7 @@ function Invoke-Shutdown {
         return
     }
 
-    $when = (Read-String "In how many seconds?") ?? 0
+    $when = ((Read-String "In how many minutes?") ?? 0) * 60
     $action = $action + " /t $($when)"
 
     $action | Invoke-Expression

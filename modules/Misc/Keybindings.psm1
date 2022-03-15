@@ -1,12 +1,6 @@
 # Navigation
-Set-PSReadLineKeyHandler -Chord "Ctrl+h" -ScriptBlock {
+Set-PSReadLineKeyHandler -Chord "Ctrl+h" -Description "Navigate: Home" -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
     [Microsoft.PowerShell.PSConsoleReadLine]::Insert('cd ~')
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
-}
-
-Set-PSReadLineKeyHandler -Chord "Ctrl+``" -ScriptBlock {
-    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('cd ~')
-    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine() 
 }
