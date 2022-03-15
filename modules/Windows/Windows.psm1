@@ -16,7 +16,7 @@ function Invoke-Shutdown {
         return
     }
 
-    $when = ((Read-String "In how many minutes?") ?? 0) * 60
+    $when = ((Read-String "In how many minutes?") ?? 0) / 60
     $action = $action + " /t $($when)"
 
     $action | Invoke-Expression
