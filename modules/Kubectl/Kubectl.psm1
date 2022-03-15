@@ -1,9 +1,9 @@
 function Get-KubectlContexts {
-    return ((kubectl config get-contexts --no-headers).Replace("*", "") | awk '{print $1}')
+    return ((kubectl config get-contexts --no-headers) | ForEach-Object { $_.Trim().Split(" ")[0] } | Where-Object { $_ -ne "*" })
 }
 
 function Invoke-KubectlFuzzySelectContext {
-    Set-KubectlCurrentContext (Get-KubectlContexts | fzf --layout reverse --height 20% --header "Select context")
+    Set-KubectlCurrentContext (Get-KubectlContexts | fzf --layout reverse --header "Select context")
 }
 
 function Set-KubectlCurrentContext($context) {
