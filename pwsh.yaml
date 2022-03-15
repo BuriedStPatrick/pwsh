@@ -51,6 +51,18 @@ modules:
       # none | fzf
       # Default: none
       selector: none
+
+      # Predicts powershell commands
+      # Options:
+      # none | history
+      # Default: none
+      predictionMode: none
+
+      # Whether to import folder icons using the Terminal-Icons module
+      # Options:
+      # true | false
+      # Default: false
+      folderIcons: true
   Vim:
     disabled: false
     config:

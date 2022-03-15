@@ -47,4 +47,17 @@ function Invoke-Prompt {
             return
         }
     }
+
+    if ($config.folderIcons) {
+        if (!(Get-Module -ListAvailable -Name Terminal-Icons)) {
+            Write-InfoMessage "Missing Terminal-Icons module. Installing."
+            Install-Module -Name Terminal-Icons -Repository PSGallery
+        }
+
+        Import-Module -Name Terminal-Icons
+    }
+
+    if ($config.predictionMode -eq "history") {
+        Set-PSReadLineOption -PredictionSource History
+    }
 }
