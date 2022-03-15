@@ -16,8 +16,10 @@ function Invoke-Shutdown {
         return
     }
 
-    $when = ((Read-String "In how many minutes?") ?? 0) / 60
-    $action = $action + " /t $($when)"
+    $minutes = [int]::Parse((Read-String "In how many minutes?"))
+
+    $seconds = $minutes * 60
+    $action = $action + " /t $($seconds)"
 
     $action | Invoke-Expression
 }
