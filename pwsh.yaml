@@ -89,6 +89,9 @@ modules:
   Npm:
     disabled: false
     config:
+  Yarn:
+    disabled: false
+    config:
 
 paths:
 - ${HOME}/tools
