@@ -1,3 +1,6 @@
 [submodule "modules/PSYaml"]
 	path = modules/PSYaml
 	url = https://github.com/Phil-Factor/PSYaml
+[submodule "modules/Npm/npm-completion"]
+	path = modules/Npm/npm-completion
+	url = https://github.com/PowerShell-Completion/npm-completion.git
