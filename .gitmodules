@@ -7,3 +7,6 @@
 [submodule "modules/Npm/yarn-completion"]
 	path = modules/Npm/yarn-completion
 	url = https://github.com/PowerShell-Completion/yarn-completion.git
+[submodule "modules/Git/posh-git"]
+	path = modules/Git/posh-git
+	url = https://github.com/dahlbyk/posh-git.git

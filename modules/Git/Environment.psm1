@@ -1,0 +1,1 @@
+$env:POSH_GIT_ENABLED=$true
