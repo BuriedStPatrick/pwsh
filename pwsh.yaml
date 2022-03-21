@@ -83,6 +83,9 @@ modules:
   Kubectl:
     disabled: false
     config:
+  Helm:
+    disabled: false
+    config:
 
 paths:
 - ${HOME}/tools
