@@ -4,3 +4,6 @@
 [submodule "modules/Npm/npm-completion"]
 	path = modules/Npm/npm-completion
 	url = https://github.com/PowerShell-Completion/npm-completion.git
+[submodule "modules/Npm/yarn-completion"]
+	path = modules/Npm/yarn-completion
+	url = https://github.com/PowerShell-Completion/yarn-completion.git
