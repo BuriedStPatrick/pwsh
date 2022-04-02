@@ -1,3 +1,14 @@
+#####################################################################
+# PWSH YAML CONFIGURATION                                           #
+#   This is the default configuration file for the PWSH profile.    #
+#   It will be processed by the PWSH profile scripts to determine   #
+#   which modules to load into the session as well as configure     #
+#   individual features.                                            #
+#                                                                   #
+# ENVIRONMENT VARIABLES                                             #
+#   Environment variables can be injected using the ${VAR} syntax.  #
+#####################################################################
+
 # Unique configurations for each module in ./modules
 # "disabled"   => The module will not be loaded
 # "config"     => The module will be loaded with the given configuration
@@ -93,5 +104,6 @@ modules:
     disabled: false
     config:
 
+# Paths to add to the session
 paths:
 - ${HOME}/tools

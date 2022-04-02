@@ -1,40 +1,21 @@
-function ConvertTo-Object($dictionary) {
-    $dictionary | ForEach-Object {
-        $props = @{}
-        $_.GetEnumerator() | ForEach-Object {
-            $props[$_.Key] = $_.Value
-        }
-
-        $props | Where-Object { $_.GetType() -eq "OrderedDictionary" } | ForEach-Object {
-            write-host $_
-        }
-
-        return [PSCustomObject]$props
-    }
-}
+Import-Module (Join-Path $env:PWSH_REPO modules PSYaml PSYaml)
 
 function Get-Config {
-    Import-Module (Join-Path $env:PWSH_REPO modules PSYaml PSYaml)
+    $defaultConfigContent = (Get-Content (Join-Path $env:PWSH_REPO pwsh.yaml))
+    $hasUserConfig = (Test-Path $env:PWSH_CONFIG) -eq $true
 
-    $cachedConfigPath = (Join-Path $env:PWSH_CACHE pwsh.yaml)
-    $userConfigPath = (Join-Path $env:PWSH_HOME pwsh.yaml)
+    $config = $hasUserConfig `
+        ? (yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' (Join-Path $env:PWSH_REPO pwsh.yaml) $env:PWSH_CONFIG) `
+        : $defaultConfigContent
 
-    if ((Test-Path $userConfigPath)) {
-        if (!(Test-Command yq)) {
-            Write-FatalMessage "yq is required"
-            return
-        }
+    $config = $config | Format-EnvironmentVariables | Format-Paths
 
-        yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' (Join-Path $env:PWSH_HOME .\pwsh.yaml) $env:PWSH_CONFIG | Format-EnvironmentVariables > $cachedConfigPath
-        $configPath = $cachedConfigPath
-    } else {
-        $configPath = (Join-Path $env:PWSH_HOME pwsh.yaml)
-    }
+    $config | Where-Object { !($_ -ilike '*#*') -and $_ } > $env:TMP\pwsh.yaml
+    $config = (ConvertFrom-Yaml -Path $env:TMP\pwsh.yaml)
 
-    $obj = ConvertTo-Object (ConvertFrom-Yaml -Path $configPath)
-    Remove-Module PSYaml
+    Remove-Item $env:TMP\pwsh.yaml
 
-    return $obj
+    return $config
 }
 
 function Edit-UserConfig {
