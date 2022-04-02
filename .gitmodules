@@ -10,3 +10,6 @@
 [submodule "modules/Git/posh-git"]
 	path = modules/Git/posh-git
 	url = https://github.com/dahlbyk/posh-git.git
+[submodule "modules/Cli/ArgParser"]
+	path = modules/Cli/ArgParser
+	url = https://github.com/buriedstpatrick/ArgParser
