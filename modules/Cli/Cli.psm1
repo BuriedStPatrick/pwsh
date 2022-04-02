@@ -25,7 +25,7 @@ function Invoke-LoadArgParser {
     Import-Module (Join-Path $env:PWSH_REPO "modules" "Cli" "ArgParser" "Output" "ArgParser")
 }
 
-function Invoke-ProfileCli() {
+function Invoke-ProfileCli {
     # Load ArgParser module
     Invoke-LoadArgParser
 

@@ -7,24 +7,24 @@ function Write-Help {
     $helpText = $action.helpText
     if(!($null -eq $helpText)) {
         Write-Output "Description:"
-        Write-Output "`t$helpText"
+        Write-Output ("`t$helpText" | Format-EnvironmentVariables)
     }
 
     $flags = $action.flags
     if(!($null -eq $flags) -and ($flags.Length -gt 0)) {
         Write-Output "Flags:"
         $flags.PSObject.Properties | ForEach-Object {
-            $required = $_.Value.required -eq $true ? "[Required]" : ""
+            $required = $_.Value.required -eq $true ? " [REQUIRED]" : ""
 
             $shortName = $_.Value.shortName ? ", -$($_.Value.shortName)" : $null
-            Write-Output "`t--$($_.Name)$shortName [$($_.Value.type)] $required"
+            Write-Output "`t--$($_.Name)$shortName [$($_.Value.type)]$required"
 
             if ($_.Value.helpText) {
-                Write-Output "`t`t$($_.Value.helpText)"
+                Write-Output ("`t`t$($_.Value.helpText)" | Format-EnvironmentVariables)
             }
 
             if ($_.Value.default) {
-                Write-Output "`t`tDefault: $($_.Value.default)"
+                Write-Output ("`t`tDefault: $($_.Value.default)" | Format-EnvironmentVariables)
             }
         }
     }
@@ -33,7 +33,7 @@ function Write-Help {
     if(!($null -eq $examples) -and ($examples.Length -gt 0)) {
         Write-Output "Examples:"
         $examples | ForEach-Object {
-            Write-Output "`t$_"
+            Write-Output ("`t$_" | Format-EnvironmentVariables)
         }
     }
 
@@ -44,7 +44,7 @@ function Write-Help {
     if ($commands.Length -gt 0) {
         Write-Output "Commands:"
         $commands | ForEach-Object {
-            Write-Output "`t$($_.Name) - $($_.Value.helpText)"
+            Write-Output ("`t$($_.Name) - $($_.Value.helpText)" | Format-EnvironmentVariables)
         }
     }
 }
