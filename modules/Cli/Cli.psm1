@@ -52,7 +52,7 @@ function Invoke-ProfileCli() {
 
     # Print helpful documentation of the CLI if requested, break out of application flow
     if (Get-ArgParserHasSwitch -Name "help" -ShortName "h" -Arguments $arguments) {
-        Write-Host "Usage: profile <command> <flags>"
+        Write-Help @args
         return
     }
 

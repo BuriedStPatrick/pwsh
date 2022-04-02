@@ -1,0 +1,81 @@
+{
+    "helpText": "Manage PWSH profile. Use --help for more information about a command scope.",
+    "config": {
+        "helpText": "Manage configuration",
+        "get": {
+            "helpText": "Display current config"
+        },
+        "find": {
+            "helpText": "Output the path to the config file"
+        },
+        "edit": {
+            "helpText": "Edit config with default configured editor (${EDITOR})"
+        }
+    },
+    "update" : {
+        "helpText": "Update the PWSH profile to the latest commit on your currently configured branch."
+    },
+    "reload": {
+        "helpText": "Reload profile"
+    },
+    "alias": {
+        "helpText": "Manage aliases for this CLI",
+        "add": {
+            "helpText": "Add an alias to the profile",
+            "flags": {
+                "name": {
+                    "helpText": "Name of the alias",
+                    "type": "string",
+                    "required": true
+                }
+            }
+        },
+        "remove": {
+            "helpText": "Remove a path from the profile",
+            "flags": {
+                "name": {
+                    "helpText": "Name of the alias to remove",
+                    "type": "string",
+                    "required": true
+                }
+            }
+        },
+        "list": {
+            "helpText": "List configured profile aliases"
+        }
+    },
+    "path": {
+        "helpText": "Manage paths",
+        "add": {
+            "helpText": "Add a path to the profile",
+            "flags": {
+                "path": {
+                    "helpText": "Path to add",
+                    "type": "string",
+                    "required": true
+                }
+            }
+        },
+        "remove": {
+            "helpText": "Remove a path from the profile",
+            "flags": {
+                "path": {
+                    "helpText": "Path to remove",
+                    "type": "string",
+                    "required": true
+                }
+            }
+        },
+        "list": {
+            "helpText": "List profile paths",
+            "flags": {
+                "all": {
+                    "helpText": "Print entire path list, not just locally configured in pwsh.yaml",
+                    "shortName": "a",
+                    "type": "switch",
+                    "default": false
+                }
+            }
+        }
+    }
+}
