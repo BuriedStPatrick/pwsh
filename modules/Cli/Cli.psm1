@@ -1,6 +1,6 @@
 function Invoke-LoadArgParser {
     # Check that module was fetched via Git. If not, update submodules.
-    if (!(Test-Path (Join-Path $env:PWSH_REPO "modules" "Cli" "ArgParser"))) {
+    if (!(Test-Path (Join-Path $env:PWSH_REPO "modules" "Cli" "ArgParser" "Output" "ArgParser" "ArgParser.psd1"))) {
         Push-Location $env:PWSH_REPO
         try {
             git submodule init
