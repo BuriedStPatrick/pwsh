@@ -1,5 +1,4 @@
-function Invoke-Prompt {
-    $config = (Get-Config).modules?.Prompt?.config
+function Invoke-Prompt($config) {
     switch($config.prompt) {
         "none" {
             return

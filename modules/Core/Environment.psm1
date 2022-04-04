@@ -1,3 +1,4 @@
+# Replaces enviroment variables with their given values
 function Format-EnvironmentVariables {
     [cmdletbinding()]
     param(
@@ -18,6 +19,32 @@ function Format-EnvironmentVariables {
             }
         }
 
-        return $content.Replace("\","/")
+        return $content
+    }
+}
+
+# Ensures paths are correctly formatted
+function Format-Paths {
+    [cmdletbinding()]
+    param(
+        [parameter(
+            Mandatory                       = $false,
+            ValueFromPipeline               = $true,
+            ValueFromPipelineByPropertyName = $true
+            )]
+        [string]$content
+    )
+    process {
+        $content | Select-String -Pattern '[a-zA-Z]:[\\\/](?:[a-zA-Z0-9]+[\\\/])*([a-zA-Z0-9]+\.*)' -AllMatches | ForEach-Object {
+            $_.matches | ForEach-Object {
+                $value = (Test-Path $_.groups[0]) `
+                    ? (Convert-Path $_.groups[0]) `
+                    : $_.groups[0]
+
+                $content = $content.Replace($_.groups[0], $value)
+            }
+        }
+
+        return $content
     }
 }

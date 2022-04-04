@@ -5,14 +5,6 @@ function Invoke-EnvironmentVariables() {
         ? (Join-Path $env:LOCALAPPDATA pwsh) `
         : (Join-Path $HOME .config pwsh)
 
-    $envOverrideFile = $IsWindows `
-        ? (Join-Path $env:PWSH_CONFIG_DIR pwshenv.ps1) `
-        : (Join-Path $env:PWSH_CONFIG_DIR pwshenv)
-
-    if (Test-Path $envOverrideFile) {
-        . $envOverrideFile
-    }
-
     $env:PWSH_HOME = $env:PWSH_HOME ?? (Join-Path $HOME pwsh)
     $env:PWSH_CACHE = $env:PWSH_CACHE ?? (Join-Path $HOME .cache pwsh)
     $env:PWSH_CONFIG = $env:PWSH_CONFIG ?? (Join-Path $env:PWSH_CONFIG_DIR pwsh.yaml)
@@ -28,15 +20,15 @@ function Invoke-EnsureEssentialDirectories {
     }
 }
 
-function Invoke-Modules {
-    # Load the core module
+function Invoke-Core {
+    # Load the core modules
     Get-ChildItem (Join-Path $env:PWSH_REPO modules\Core\*.psm1) -File `
-        | ForEach-Object { Import-Module $_.FullName }
+    | ForEach-Object { Import-Module $_.FullName }
+}
 
-    $pwshConfig = Get-Config
-
+function Invoke-Modules($config) {
     # Get disabled module names
-    $disabledModules = $pwshConfig.modules.PSObject.Properties `
+    $disabledModules = $config.modules.PSObject.Properties `
         | Where-Object { $_.Value.disabled } `
         | Select-Object -ExpandProperty Name
 
@@ -47,11 +39,9 @@ function Invoke-Modules {
         | ForEach-Object { Import-Module $_.FullName }
 }
 
-function Invoke-Path {
-    $pwshConfig = Get-Config
-
+function Invoke-Path($config) {
     $path = $env:Path.Split(";") | Where-Object { $_ } | Sort-Object | Get-Unique
-    $path += $pwshConfig.paths
+    $path += $config.paths
 
     $env:Path = [string]::Join(";", $path)
 }
@@ -62,11 +52,17 @@ Invoke-EnvironmentVariables
 # Ensure essential dirs exist
 Invoke-EnsureEssentialDirectories
 
+# Load core modules
+Invoke-Core
+
+# Get config
+$config = Get-Config
+
 # Load modules
-Invoke-Modules
+Invoke-Modules $config
 
 # Update PATH
-Invoke-Path
+Invoke-Path $config
 
 # Start prompt
-Invoke-Prompt
+Invoke-Prompt $config.modules?.Prompt?.config
