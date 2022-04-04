@@ -55,7 +55,7 @@ modules:
         configPath:
       omp:
         # Name of the Oh-My-Posh theme to use
-        # Print available themes with Write-OhMyPoshThemePreviews
+        # Print available themes with Get-PoshThemes
         theme: "marcduiker"
       # The list selector to use for interactive prompts
       # Options:
