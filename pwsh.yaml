@@ -103,6 +103,13 @@ modules:
   Yarn:
     disabled: false
     config:
+  AutoHotkey:
+    disabled: true
+    config:
+      # Whether AutoHotkey keybinds should be loaded when signing in
+      # Requires admin-session to initialize
+      # Default: true
+      loadKeybindsOnStartup: true
 
 # Paths to add to the session
 paths:
