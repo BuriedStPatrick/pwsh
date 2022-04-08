@@ -14,10 +14,10 @@
 # "config"     => The module will be loaded with the given configuration
 modules:
   FuzzyFinder:
-    disabled: false
+    disabled: true
     config:
   Ssh:
-    disabled: false
+    disabled: true
     config:
       # List of paths to SSH keys to load on shell init
       # Default: empty
@@ -27,19 +27,19 @@ modules:
       #   - ~/.ssh/id_github
       keys:
   Dotnet:
-    disabled: false
+    disabled: true
     config:
   Git:
-    disabled: false
+    disabled: true
     config:
   Lf:
-    disabled: false
+    disabled: true
     config:
   Misc:
-    disabled: false
+    disabled: true
     config:
   Prompt:
-    disabled: false
+    disabled: true
     config:
       # The shell prompt to invoke
       # Options:
@@ -75,7 +75,7 @@ modules:
       # Default: false
       folderIcons: true
   Vim:
-    disabled: false
+    disabled: true
     config:
       # Sets vim (or neovim) as the default $env:EDITOR
       # This will be moved to a generalized option in the future
@@ -84,24 +84,24 @@ modules:
       # Aliases vim so that it points to nvim instead
       useNeovim: true
   PasswordState:
-    disabled: false
+    disabled: true
     config:
       baseUrl:
       domain:
   Postgres:
-    disabled: false
+    disabled: true
     config:
   Kubectl:
-    disabled: false
+    disabled: true
     config:
   Helm:
-    disabled: false
+    disabled: true
     config:
   Npm:
-    disabled: false
+    disabled: true
     config:
   Yarn:
-    disabled: false
+    disabled: true
     config:
   AutoHotkey:
     disabled: true
