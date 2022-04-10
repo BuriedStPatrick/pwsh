@@ -1,5 +1,5 @@
 $sshConfig = (Get-Config).modules.Ssh
-if ($sshConfig.disabled) {
+if (!($sshConfig?.enabled ?? $false)) {
     return
 }
 

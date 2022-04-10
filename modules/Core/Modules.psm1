@@ -29,18 +29,18 @@ function Get-ProfileModules {
                 $module = $_
             }
 
-            if ($config.modules["$($_)"]?.disabled -eq $true -and $Include?.Contains("Disabled")) {
+            if ($config.modules["$($_)"]?.enabled -eq $false -and $Include?.Contains("Disabled")) {
                 $module = $_
             }
 
-            if ($config.modules["$($_)"]?.disabled -eq $false -and $Include?.Contains("Enabled")) {
+            if ($config.modules["$($_)"]?.enabled -eq $true -and $Include?.Contains("Enabled")) {
                 $module = $_
             }
 
             if ($null -ne $module) {
                 return @{
                     Name = $_
-                    Disabled = $config.modules["$($_)"]?.disabled
+                    Enabled = $config.modules["$($_)"]?.enabled
                 }
             }
         } | Where-Object { !( $_ -eq $null )}

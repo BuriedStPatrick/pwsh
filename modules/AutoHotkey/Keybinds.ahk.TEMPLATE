@@ -5,4 +5,8 @@ LWin & Enter::
     Run, wt.exe
     return
 
-^x::ExitApp
+; Stop keybinds
+LWin & Q::ExitApp
+
+; Reload keybinds
+LWin & R::Reload

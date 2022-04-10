@@ -29,7 +29,7 @@ function Invoke-Core {
 function Invoke-Modules($config) {
     # Get disabled module names
     $modules = $config.modules
-    $disabledModules = $modules.Keys | Where-Object { $modules[$_].disabled }
+    $disabledModules = $modules.Keys | Where-Object { !$modules[$_].enabled }
 
     # Load enabled feature modules
     Get-ChildItem (Join-Path $env:PWSH_REPO modules) -Directory `
@@ -64,6 +64,6 @@ Invoke-Modules $config
 Invoke-Path $config
 
 # Start prompt
-if (!($config.modules?.Prompt?.disabled)) {
+if ($config.modules?.Prompt?.enabled ?? $false) {
     Invoke-Prompt $config.modules?.Prompt?.config
 }

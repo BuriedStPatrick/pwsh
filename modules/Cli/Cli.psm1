@@ -1,3 +1,13 @@
+function New-ProfileAlias {
+    Write-Host "hello!"
+}
+
+$commands = @{
+    "alias" = @{
+        "add" = "New-ProfileAlias"
+    }
+}
+
 function Invoke-LoadArgParser {
     # Check that module was fetched via Git. If not, update submodules.
     if (!(Test-Path (Join-Path $env:PWSH_REPO "modules" "Cli" "ArgParser" "Output" "ArgParser" "ArgParser.psd1"))) {
@@ -56,10 +66,21 @@ function Invoke-ProfileCli {
         return
     }
 
-    $name = Get-ArgParserStringValue -Name "name" -ShortName "n" -Arguments $arguments
-    if ($name) {
-       Write-Host "Hello, $name! You have been reported to the authorities, have a great day :D"
-    }
+    $scope = Get-ArgParserScope -Arguments $arguments
+
+    # $name = Get-ArgParserStringValue -Name "name" -ShortName "n" -Arguments $arguments
+    # if ($name) {
+    #    Write-Host "Hello, $name! You have been reported to the authorities, have a great day :D"
+    # }
+
+    $index = 0
+    $command = $commands
+    $scope | ForEach-Object {
+        $command = $command[$_]
+        $index++
+    } | Select-Object -Last 1
+
+    $command | Invoke-Expression
 }
 
 Set-Alias profile Invoke-ProfileCli

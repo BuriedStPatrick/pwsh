@@ -17,5 +17,5 @@ function Test-Command($command) {
 }
 
 function Test-Module($module) {
-    return !((Get-Config).modules?."$module"?.disabled ?? $true)
+    return (Get-Config).modules?."$module"?.enabled ?? $false
 }

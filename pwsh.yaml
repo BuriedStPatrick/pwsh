@@ -14,10 +14,10 @@
 # "config"     => The module will be loaded with the given configuration
 modules:
   FuzzyFinder:
-    disabled: true
+    enabled: false
     config:
   Ssh:
-    disabled: true
+    enabled: false
     config:
       # List of paths to SSH keys to load on shell init
       # Default: empty
@@ -27,19 +27,19 @@ modules:
       #   - ~/.ssh/id_github
       keys:
   Dotnet:
-    disabled: true
+    enabled: false
     config:
   Git:
-    disabled: true
+    enabled: false
     config:
   Lf:
-    disabled: true
+    enabled: false
     config:
   Misc:
-    disabled: true
+    enabled: false
     config:
   Prompt:
-    disabled: true
+    enabled: false
     config:
       # The shell prompt to invoke
       # Options:
@@ -71,46 +71,62 @@ modules:
 
       # Whether to import folder icons using the Terminal-Icons module
       # Options:
-      # true | false
+      # false | false
       # Default: false
-      folderIcons: true
+      folderIcons: false
   Vim:
-    disabled: true
+    enabled: false
     config:
       # Sets vim (or neovim) as the default $env:EDITOR
       # This will be moved to a generalized option in the future
-      setDefaultEditor: true
+      setDefaultEditor: false
 
       # Aliases vim so that it points to nvim instead
-      useNeovim: true
+      useNeovim: false
   PasswordState:
-    disabled: true
+    enabled: false
     config:
       baseUrl:
       domain:
   Postgres:
-    disabled: true
+    enabled: false
     config:
   Kubectl:
-    disabled: true
+    enabled: false
     config:
   Helm:
-    disabled: true
+    enabled: false
     config:
   Npm:
-    disabled: true
+    enabled: false
     config:
   Yarn:
-    disabled: true
+    enabled: false
     config:
   AutoHotkey:
-    disabled: true
+    enabled: false
     config:
       # Whether AutoHotkey keybinds should be loaded when signing in
       # Requires admin-session to initialize
-      # Default: true
-      loadKeybindsOnStartup: true
+      # Default: false
+      loadKeybindsOnStartup: false
 
 # Paths to add to the session
 paths:
 - ${HOME}/tools
+
+# Terminal emulator settings
+terminal:
+  # Active terminal emulator
+  # Default: wt.exe
+  path: wt.exe
+
+  # Any arguments to pass to the terminal emulator
+  # Example:
+  # args: |
+  #   --fullscreen
+  #   split-pane
+  args: |
+    --fullscreen
+    split-pane
+
