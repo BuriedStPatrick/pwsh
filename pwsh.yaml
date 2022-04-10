@@ -90,19 +90,15 @@ modules:
       domain:
   Postgres:
     enabled: false
-    config:
   Kubectl:
     enabled: false
     config:
   Helm:
     enabled: false
-    config:
   Npm:
     enabled: false
-    config:
   Yarn:
     enabled: false
-    config:
   AutoHotkey:
     enabled: false
     config:
@@ -110,6 +106,18 @@ modules:
       # Requires admin-session to initialize
       # Default: false
       loadKeybindsOnStartup: false
+
+      # Keybindings for various functionality
+      # Full key list: https://www.autohotkey.com/docs/KeyList.htm
+      binds:
+        # Launch configured terminal
+        terminal: "LWin & Enter"
+
+        # Reload all AutoHotkey keybinds
+        reload: "LWin & R"
+
+        # Stop all AutoHotkey keybinds
+        stop: "LWin & Q"
 
 # Paths to add to the session
 paths:

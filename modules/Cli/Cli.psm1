@@ -6,6 +6,10 @@ $commands = @{
     "alias" = @{
         "add" = "New-ProfileAlias"
     }
+    "keybinds" = @{
+        "install" = "Install-AutoHotkeyKeybindings"
+        "uninstall" = "Uninstall-AutoHotkeyKeybindings"
+    }
 }
 
 function Invoke-LoadArgParser {

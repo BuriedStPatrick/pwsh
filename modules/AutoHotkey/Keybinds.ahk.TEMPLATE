@@ -1,12 +1,12 @@
 #SingleInstance,Force
 
 ; Open Windows Terminal on Windows+Enter
-LWin & Enter::
+#{modules.AutoHotkey.config.binds.terminal}::
     Run, #{terminal.path} #{terminal.args}
     return
 
 ; Stop keybinds
-LWin & Q::ExitApp
+#{modules.AutoHotkey.config.binds.stop}::ExitApp
 
 ; Reload keybinds
-LWin & R::Reload
+#{modules.AutoHotkey.config.binds.reload}::Reload
