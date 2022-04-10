@@ -23,6 +23,39 @@ function Format-EnvironmentVariables {
     }
 }
 
+# Replaces config variables with their given values
+function Format-ConfigValues {
+    [cmdletbinding()]
+    param(
+        [parameter(
+            Mandatory                       = $false,
+            ValueFromPipeline               = $true,
+            ValueFromPipelineByPropertyName = $true
+            )]
+        [string]$Content,
+        [parameter(
+            Mandatory = $true
+        )]
+        $Config
+    )
+    process {
+        $Content | Select-String -Pattern '#\{(.*?)\}' -AllMatches | ForEach-Object {
+            $_.matches | ForEach-Object {
+                $propertyNames = $_.groups[1].Value.Split(".")
+
+                $value = $Config
+                $propertyNames | ForEach-Object {
+                    $value = $value[$_]
+                }
+
+                $Content = $Content.Replace($_.groups[0], $value)
+            }
+        }
+
+        return $Content
+    }
+}
+
 # Ensures paths are correctly formatted
 function Format-Paths {
     [cmdletbinding()]

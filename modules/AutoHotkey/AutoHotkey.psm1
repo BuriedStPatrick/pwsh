@@ -2,7 +2,7 @@ function Invoke-AutoHotkeyKeybindings($config) {
     Get-ChildItem (Join-Path $env:PWSH_REPO "modules" "AutoHotkey" "*.ahk.TEMPLATE") | ForEach-Object {
         $destination = $_.FullName.Replace(".TEMPLATE", "")
         if (!(Test-Path $destination)) {
-            Get-Content $_.FullName | Format-EnvironmentVariables | Out-File $destination
+            Get-Content $_.FullName | Format-EnvironmentVariables | Format-ConfigValues -Config (Get-Config) | Out-File $destination
         }
     }
 

@@ -123,10 +123,5 @@ terminal:
 
   # Any arguments to pass to the terminal emulator
   # Example:
-  # args: |
-  #   --fullscreen
-  #   split-pane
-  args: |
-    --fullscreen
-    split-pane
-
+  # args: --fullscreen split-pane
+  args: --fullscreen split-pane

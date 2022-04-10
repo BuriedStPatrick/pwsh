@@ -2,7 +2,7 @@
 
 ; Open Windows Terminal on Windows+Enter
 LWin & Enter::
-    Run, wt.exe
+    Run, #{terminal.path} #{terminal.args}
     return
 
 ; Stop keybinds
