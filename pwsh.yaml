@@ -19,6 +19,11 @@ modules:
   Ssh:
     enabled: false
     config:
+      # Path to ssh binaries
+      # Options:
+      # windows_git | windows_openssh
+      # Default: windows_openssh
+      binaries: windows_openssh
       # List of paths to SSH keys to load on shell init
       # Default: empty
       # Example:
@@ -132,4 +137,4 @@ terminal:
   # Any arguments to pass to the terminal emulator
   # Example:
   # args: --fullscreen split-pane
-  args: --fullscreen split-pane
+  args:

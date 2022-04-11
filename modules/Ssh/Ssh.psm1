@@ -1,5 +1,5 @@
 $sshConfig = (Get-Config).modules.Ssh
-if (!($sshConfig?.enabled ?? $false)) {
+if (!($sshConfig.enabled)) {
     return
 }
 
@@ -13,10 +13,24 @@ if (!($sshConfig?.enabled ?? $false)) {
 
 function Set-GitEnvironmentVars {
     # Set git SSH agent to whatever is set as the ssh agent in the PATH
-    $env:GIT_SSH=$((Get-Command -Name ssh).Source)
+    if ($sshConfig.config.binaries -eq "windows_openssh") {
+        $binaries = "C:\WINDOWS\System32\OpenSSH"
+    }
+
+    if ($sshConfig.config.binaries -eq "windows_git") {
+        $binaries = Convert-Path (Join-Path (Get-Command git).Source ".." ".." "usr" "bin")
+    }
+
+    $env:PWSH_SSH_BINARIES = $binaries
+    $env:GIT_SSH = (Join-Path $binaries "ssh.exe")
 }
 
 function Start-OpenSshAgent {
+    if (!($sshConfig.config.binaries -eq "windows_openssh")) {
+        Write-WarningMessage "Cannot start non built in ssh-agent for now :("
+        return
+    }
+
     if (!(Get-Process | Where-Object { $_.Name -eq 'ssh-agent'})) {
         $service = Get-Service ssh-agent
 
@@ -47,9 +61,10 @@ if ($IsWindows) {
         # For each ssh-agent connection, add the specified public key to the agent.
         if ($sshConfig.config.keys.Length -gt 0) {
             $keys = $sshConfig.config.keys | ForEach-Object { Get-Item $_ }
-            $currentlyAddedSshKeys = $(ssh-add -l)?.Split(" ")?[3]?.Replace("(", "").Replace(")", "").ToLower() ?? @()
+            $current = "$(Join-Path "$env:PWSH_SSH_BINARIES" "ssh-add") -l" | Invoke-Expression
+            $currentlyAddedSshKeys = $current.Split(" ")?[3]?.Replace("(", "").Replace(")", "").ToLower() ?? @()
             $keys | Where-Object { !($_.Name.Replace("id_", "") -in $currentlyAddedSshKeys) } | ForEach-Object {
-                ssh-add $_.FullName
+                "$(Join-Path "$env:PWSH_SSH_BINARIES" "ssh-add") $($_.FullName)" | Invoke-Expression
             }
         }
     }
