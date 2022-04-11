@@ -49,7 +49,7 @@ You can very quickly open the config-file using `Ctrl+.` in your PowerShell sess
 
 ## Modules
 
-The different modules have certain dependencies, and some of them might not be relevant to you. You can disable them by setting the `modules.<MODULE-NAME>.disabled` property to true in the config. The only module that can't be disabled (unless you change the script) is the Core module, since the other modules depend on some common functionality like writing readable info messages.
+The different modules have certain dependencies, and some of them might not be relevant to you. They are all disabled by default (Except `Core`). You can enabled them by setting the `modules.<MODULE-NAME>.enabled` property to true in the config.
 
 ## Keybindings
 

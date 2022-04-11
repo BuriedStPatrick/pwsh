@@ -14,11 +14,16 @@
 # "config"     => The module will be loaded with the given configuration
 modules:
   FuzzyFinder:
-    disabled: false
+    enabled: false
     config:
   Ssh:
-    disabled: false
+    enabled: false
     config:
+      # Path to ssh binaries
+      # Options:
+      # windows_git | windows_openssh
+      # Default: windows_openssh
+      binaries: windows_openssh
       # List of paths to SSH keys to load on shell init
       # Default: empty
       # Example:
@@ -27,19 +32,19 @@ modules:
       #   - ~/.ssh/id_github
       keys:
   Dotnet:
-    disabled: false
+    enabled: false
     config:
   Git:
-    disabled: false
+    enabled: false
     config:
   Lf:
-    disabled: false
+    enabled: false
     config:
   Misc:
-    disabled: false
+    enabled: false
     config:
   Prompt:
-    disabled: false
+    enabled: false
     config:
       # The shell prompt to invoke
       # Options:
@@ -71,39 +76,65 @@ modules:
 
       # Whether to import folder icons using the Terminal-Icons module
       # Options:
-      # true | false
+      # false | false
       # Default: false
-      folderIcons: true
+      folderIcons: false
   Vim:
-    disabled: false
+    enabled: false
     config:
       # Sets vim (or neovim) as the default $env:EDITOR
       # This will be moved to a generalized option in the future
-      setDefaultEditor: true
+      setDefaultEditor: false
 
       # Aliases vim so that it points to nvim instead
-      useNeovim: true
+      useNeovim: false
   PasswordState:
-    disabled: false
+    enabled: false
     config:
       baseUrl:
       domain:
   Postgres:
-    disabled: false
-    config:
+    enabled: false
   Kubectl:
-    disabled: false
+    enabled: false
     config:
   Helm:
-    disabled: false
-    config:
+    enabled: false
   Npm:
-    disabled: false
-    config:
+    enabled: false
   Yarn:
-    disabled: false
+    enabled: false
+  AutoHotkey:
+    enabled: false
     config:
+      # Whether AutoHotkey keybinds should be loaded when signing in
+      # Requires admin-session to initialize
+      # Default: false
+      loadKeybindsOnStartup: false
+
+      # Keybindings for various functionality
+      # Full key list: https://www.autohotkey.com/docs/KeyList.htm
+      binds:
+        # Launch configured terminal
+        terminal: "LWin & Enter"
+
+        # Reload all AutoHotkey keybinds
+        reload: "LWin & R"
+
+        # Stop all AutoHotkey keybinds
+        stop: "LWin & Q"
 
 # Paths to add to the session
 paths:
 - ${HOME}/tools
+
+# Terminal emulator settings
+terminal:
+  # Active terminal emulator
+  # Default: wt.exe
+  path: wt.exe
+
+  # Any arguments to pass to the terminal emulator
+  # Example:
+  # args: --fullscreen split-pane
+  args:
