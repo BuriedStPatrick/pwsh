@@ -5,6 +5,11 @@
     Run, #{terminal.path} #{terminal.args}
     return
 
+; Open Slack on Super+S
+LWin & s::
+    Run, "${LOCALAPPDATA}\slack\slack.exe"
+    return
+
 ; Stop keybinds
 #{modules.AutoHotkey.config.binds.stop}::ExitApp
 
