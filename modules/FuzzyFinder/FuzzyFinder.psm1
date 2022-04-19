@@ -13,7 +13,14 @@ function Invoke-FuzzyFile {
 
     # If selection is file, open it
     if (Test-Path -Path $selection -PathType Leaf) {
-        Invoke-Item $selection
+        # If known text file type, open with configured EDITOR
+        if ((Test-IsTextFile -FilePath $selection)) {
+            "$env:EDITOR $selection" | Invoke-Expression
+        }
+        # Otherwise, just open it with default app
+        else {
+            Invoke-Item $selection
+        }
     }
 
     # If selection is a directory, navigate and invoke this function again
@@ -21,4 +28,30 @@ function Invoke-FuzzyFile {
         Set-Location $selection
         Invoke-FuzzyFile
     }
+}
+
+function Test-IsTextFile($FilePath) {
+    $extension = (Get-ChildItem (Convert-Path $selection)).Extension
+
+    return @(
+        '.txt',
+        '.md',
+        '.yml',
+        '.yaml',
+        '.html',
+        '.js',
+        '.json',
+        '.toml',
+        '.xml',
+        '.config',
+        '.css',
+        '.scss',
+        '.less',
+        '.cs',
+        '.ps1',
+        'psm1',
+        '.sh',
+        '.gitmodules',
+        '.gitattributes',
+        '.gitconfig').Contains($extension)
 }
