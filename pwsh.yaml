@@ -138,3 +138,34 @@ terminal:
   # Example:
   # args: --fullscreen split-pane
   args:
+
+# Default editors when opening certain files
+editors:
+  - path: nvim
+    extensions:
+      - .txt
+      - .md
+      - .yml
+      - .yaml
+      - .html
+      - .htm
+      - .js
+      - .ts
+      - .json
+      - .toml
+      - .xml
+      - .config
+      - .css
+      - .scss
+      - .less
+      - .ps1
+      - .psm1
+      - .psd1
+      - .sh
+      - .gitmodules
+      - .gitattributes
+      - .editorconfig
+      - .gitconfig
+  - path: code
+    extensions:
+      - .cs

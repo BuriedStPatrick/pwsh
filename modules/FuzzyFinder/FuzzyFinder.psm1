@@ -13,9 +13,10 @@ function Invoke-FuzzyFile {
 
     # If selection is file, open it
     if (Test-Path -Path $selection -PathType Leaf) {
-        # If known text file type, open with configured EDITOR
-        if ((Test-IsTextFile -FilePath $selection)) {
-            "$env:EDITOR $selection" | Invoke-Expression
+        # If known text file type, open with configured editor
+        $editor = Get-Editor -FilePath $selection
+        if ($editor) {
+            "$($editor.path) $selection" | Invoke-Expression
         }
         # Otherwise, just open it with default app
         else {
@@ -30,28 +31,10 @@ function Invoke-FuzzyFile {
     }
 }
 
-function Test-IsTextFile($FilePath) {
-    $extension = (Get-ChildItem (Convert-Path $selection)).Extension
+function Get-Editor($FilePath) {
+    $extension = (Get-ChildItem (Convert-Path $FilePath)).Extension
 
-    return @(
-        '.txt',
-        '.md',
-        '.yml',
-        '.yaml',
-        '.html',
-        '.js',
-        '.json',
-        '.toml',
-        '.xml',
-        '.config',
-        '.css',
-        '.scss',
-        '.less',
-        '.cs',
-        '.ps1',
-        'psm1',
-        '.sh',
-        '.gitmodules',
-        '.gitattributes',
-        '.gitconfig').Contains($extension)
+    return (Get-Config).editors
+        | Where-Object { $_.extensions.Contains($extension) }
+        | Select-Object -First 1
 }
