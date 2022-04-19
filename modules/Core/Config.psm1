@@ -35,9 +35,28 @@ function Edit-UserConfig {
     "$env:EDITOR $env:PWSH_CONFIG" | Invoke-Expression
 }
 
+function Edit-Configs {
+    # Paths to potential config files
+    $configs = @(
+        (Convert-Path (Join-Path $env:APPDATA "alacritty" "alacritty.yml")),
+        (Get-ChildItem (Join-Path $env:LOCALAPPDATA "Packages" "Microsoft.WindowsTerminal_*" "LocalState" "settings.json")).FullName)
+
+    $config = Read-Option "Select config to edit" $configs
+
+    if ($config) {
+        "$env:EDITOR $config" | Invoke-Expression
+    }
+}
+
 # Keybinds
 Set-PSReadLineKeyHandler -Chord Ctrl+. -Description "Edit pwsh.yaml config with $env:EDITOR" -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
     [Microsoft.PowerShell.PSConsoleReadLine]::Insert('Edit-UserConfig')
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+}
+
+Set-PSReadLineKeyHandler -Chord Ctrl+e -Description "Pick a config file to edit with $env:EDITOR" -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('Edit-Configs')
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }
