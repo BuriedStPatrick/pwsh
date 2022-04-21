@@ -40,7 +40,7 @@ function Invoke-Modules($config) {
 }
 
 function Invoke-Path($config) {
-    $path = $env:Path.Split(";") | Where-Object { $_ } | Sort-Object | Get-Unique
+    $path = $env:Path.Split(";") | Where-Object { $_ } | Select-Object -Unique
     $path += $config.paths
 
     $env:Path = [string]::Join(";", $path)
