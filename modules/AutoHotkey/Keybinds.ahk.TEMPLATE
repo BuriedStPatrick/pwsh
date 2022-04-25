@@ -2,7 +2,7 @@
 
 ; Open Windows Terminal on Windows+Enter
 #{modules.AutoHotkey.config.binds.terminal}::
-    Run, #{terminal.path} #{terminal.args}
+    Run, "#{terminal.path}" #{terminal.args}
     return
 
 ; Open Slack on Super+S

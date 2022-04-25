@@ -51,7 +51,7 @@ function Edit-Configs {
 }
 
 # Keybinds
-Set-PSReadLineKeyHandler -Chord Ctrl+. -Description "Edit pwsh.yaml config with $env:EDITOR" -ScriptBlock {
+Set-PSReadLineKeyHandler -Chord "Ctrl+." -Description "Edit pwsh.yaml config with $env:EDITOR" -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
     [Microsoft.PowerShell.PSConsoleReadLine]::Insert('Edit-UserConfig')
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
