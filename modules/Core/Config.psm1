@@ -10,10 +10,13 @@ function Get-Config {
 
     $config = $config | Format-EnvironmentVariables | Format-Paths
 
-    $config | Where-Object { !($_ -ilike '*#*') -and $_ } > $env:TMP\pwsh.yaml
-    $config = (ConvertFrom-Yaml -Path $env:TMP\pwsh.yaml)
+    $hash = Get-Random
+    $tempConfigPath = (Join-Path $env:TMP "pwsh.$hash.yaml")
 
-    Remove-Item $env:TMP\pwsh.yaml
+    $config | Where-Object { !($_ -ilike '*#*') -and $_ } | Out-File -Path $tempConfigPath
+    $config = (ConvertFrom-Yaml -Path $tempConfigPath)
+
+    Remove-Item $tempConfigPath
 
     return $config
 }
