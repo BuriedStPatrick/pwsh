@@ -43,7 +43,8 @@ function Edit-Configs {
     $configs = @(
         (Join-Path $env:APPDATA "alacritty" "alacritty.yml"),
         (Get-ChildItem (Join-Path $env:LOCALAPPDATA "Packages" "Microsoft.WindowsTerminal_*" "LocalState" "settings.json")).FullName),
-        (Join-Path $env:HOME ".gitconfig")
+        (Join-Path $env:HOME ".gitconfig"),
+        (Join-Path $env:HOME ".config" "starship.toml")
         | Where-Object { Test-Path $_ }
 
     $config = Read-Option "Select config to edit" $configs
