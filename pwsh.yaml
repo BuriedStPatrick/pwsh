@@ -124,9 +124,13 @@ modules:
         # Stop all AutoHotkey keybinds
         stop: "LWin & Q"
 
-# Paths to add to the session
+# Configure paths
 paths:
-- ${HOME}/tools
+  # Paths to append to the PATH environment variable
+  include:
+    - ${HOME}/tools
+  # Exact paths remove from the PATH environment variable
+  exclude:
 
 # Terminal emulator settings
 terminal:
