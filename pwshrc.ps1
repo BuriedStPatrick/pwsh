@@ -39,11 +39,11 @@ function Invoke-Modules($config) {
 }
 
 function Invoke-Path($config) {
-    $path = $env:Path.Split(";") | Where-Object { $_ } | Sort-Object | Get-Unique
+    $path = $env:PATH.Split(";") | Where-Object { $_ } | Sort-Object | Get-Unique
     $path += $config.paths.include
     $path = $path | Where-Object { !( $config.paths.exclude.Contains($_)) }
 
-    $env:Path = [string]::Join(";", $path)
+    $env:PATH = [string]::Join(";", $path)
 }
 
 # Load environment variables

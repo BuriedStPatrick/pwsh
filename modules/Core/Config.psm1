@@ -11,6 +11,11 @@ function Get-Config {
     $config = $config | Format-EnvironmentVariables | Format-Paths
 
     $hash = Get-Random
+    $env:TMP = $env:TMP ?? (Join-Path $HOME "tmp")
+    if (!(Test-Path $env:TMP)) {
+        New-Item -ItemType Directory -Force -Path $env:TMP
+    }
+
     $tempConfigPath = (Join-Path $env:TMP "pwsh.$hash.yaml")
 
     $config | Where-Object { !($_ -ilike '*#*') -and $_ } | Out-File -Path $tempConfigPath
